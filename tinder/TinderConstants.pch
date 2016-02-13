@@ -1,0 +1,49 @@
+#define SCREEN_WIDTH [UIScreen mainScreen].bounds.size.width
+#define SCREEN_HEIGHT [UIScreen mainScreen].bounds.size.height
+
+#define IS_IPHONE_4S SCREEN_HEIGHT == 480
+#define IS_IPHONE_5 SCREEN_HEIGHT == 568
+#define IS_IPHONE_6 SCREEN_WIDTH == 375
+#define IS_IPHONE_6_PLUS SCREEN_WIDTH == 414
+#define TABBARHEIGHT 49
+#define NAVBARHEIGHT 44
+#define STATUSBARHEIGHT 20
+
+#define ScaleToScreenWidth(fullSize) fullSize / 1242 * SCREEN_WIDTH
+
+static inline CGFloat shf() {
+    return [UIScreen mainScreen].bounds.size.height / 667;
+}
+
+// screen height scaling factor off a 667pt baseline (iPhone 6)
+static inline CGFloat shf6(int attenuation) {
+    return (1 + ((shf() - 1) / attenuation));
+}
+
+// screen height scaling factor off a 480pt baseline (iPhone 4S)
+static inline CGFloat shf4(int attenuation) {
+    CGFloat SHF = [UIScreen mainScreen].bounds.size.height / 480;
+    return (1 + ((SHF - 1) / attenuation));
+}
+
+//color value for placeholders
+#define kPlaceHolderColor [UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:0.5f]
+#define kTimeStampColor1 [UIColor colorWithRed:74.0/255. green:74./255. blue:74.0/255. alpha:1.0f]
+#define kTimeStampColor2 [UIColor colorWithRed:142.0/255. green:142.0/255. blue:147.0/255. alpha:1.0f]
+#define kSendButtonEnableColor [UIColor colorWithRed:38.0/255. green:150.0/255. blue:21.0/255. alpha:1.0f]
+#define kSendButtonDisableColor [UIColor colorWithRed:167.0/255. green:167.0/255. blue:167.0/255. alpha:1.0f]
+#define kEditButtonDisableColor [UIColor colorWithRed:66.0/255. green:154.0/255. blue:203.0/255. alpha:1.0f]
+
+//Chat cell identifiers
+#define kMyChatCell @"MyChatCell"
+#define kChatTimeStampCell @"ChatTimeStampCell"
+#define kChatImageCell      @"ChatImageCell"
+
+#define kChatMaxLength 100
+#define UNICODE_OBJECT_PLACEHOLDER @"\ufffc"
+//feed detail cell indentifiers
+
+#define kFeedDetailFirstCellIdentifier @"FeedDetailFirstCellIdentifier"
+#define kFeedDetailSecondCellIdentifier @"FeedDetailSecondCellIdentifier"
+
+
