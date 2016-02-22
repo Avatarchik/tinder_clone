@@ -17,9 +17,12 @@ PODS:
     - FBSDKLoginKit (~> 4.9.0-beta)
     - FBSDKTVOSKit (~> 4.9.0-beta)
     - Parse (~> 1.11)
+  - SLPagingView (0.0.5)
 
 DEPENDENCIES:
+  - Parse (~> 1.12)
   - ParseFacebookUtilsV4 (~> 1.11)
+  - SLPagingView
 
 SPEC CHECKSUMS:
   Bolts: f52a250053bb517ca874523c3913776359ab3def
@@ -27,5 +30,6 @@ SPEC CHECKSUMS:
   FBSDKLoginKit: ec22dc49bd372b064e93d6773df4ffefb3a552a2
   Parse: de2c52a9a1421b91ae7594ab8ce191afd184f19b
   ParseFacebookUtilsV4: 216e03bd560404eed09a4875c75f0c1cdf758070
+  SLPagingView: ba9bb6102cb318ce56f23d0a7e49a46ddcdad7e3
 
 COCOAPODS: 0.39.0

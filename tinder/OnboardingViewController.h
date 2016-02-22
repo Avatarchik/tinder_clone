@@ -11,4 +11,6 @@
 
 @interface OnboardingViewController : UIViewController
 
+-(void)LogIned;
+
 @end

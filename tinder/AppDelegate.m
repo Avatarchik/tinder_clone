@@ -11,10 +11,11 @@
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <Parse/Parse.h>
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
-
+#import "MainViewController.h"
 
 @interface AppDelegate (){
-    UINavigationController *navigationController;
+    
+    MainViewController *mainVC;
 }
 
 @end
@@ -25,6 +26,8 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    
     [Parse setApplicationId:@"9M1NfC5lh6pWQGuSK59ahtC6XSUpxh9CMO79Zrpl" clientKey:@"s1K7EY2FEyjTVQ4lkTGQwg7I33FajWNkHyr3staY"];
     
     //---------------------------------------------------------------------------------------------------------------------------------------------
@@ -34,14 +37,23 @@
     [PFFacebookUtils initializeFacebookWithApplicationLaunchOptions:launchOptions];
     //----------------------------------------------------------------------------------------------------------
     
+    
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    OnboardingViewController *onboardVC = [[OnboardingViewController alloc] init];
-    onboardVC.view.backgroundColor = [UIColor clearColor];
-    navigationController = [[UINavigationController alloc] initWithRootViewController:onboardVC];
-    [navigationController.navigationBar setTranslucent:NO];
-    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    self.window.rootViewController = navigationController;
-        
+    
+    if ([userDefaults boolForKey:@"isLoggedIn"]) {
+        OnboardingViewController *onboardVC = [[OnboardingViewController alloc] init];
+        [onboardVC LogIned];
+    }
+    else
+    {
+        OnboardingViewController *onboardVC = [[OnboardingViewController alloc] init];
+        onboardVC.view.backgroundColor = [UIColor clearColor];
+        _navigationController = [[UINavigationController alloc] initWithRootViewController:onboardVC];
+        [_navigationController.navigationBar setTranslucent:NO];
+        self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+        self.window.rootViewController = _navigationController;
+    }
+    
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     

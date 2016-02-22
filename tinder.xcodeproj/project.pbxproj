@@ -15,6 +15,12 @@
 		1F64339E1C6E3F29009D4D13 /* PTSerif.ttc in Resources */ = {isa = PBXBuildFile; fileRef = 1F64339D1C6E3F29009D4D13 /* PTSerif.ttc */; };
 		1F6433A41C6EFEA9009D4D13 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1F6433A31C6EFEA9009D4D13 /* MainViewController.m */; };
 		1F6433A71C6F0278009D4D13 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1F6433A51C6F0278009D4D13 /* Main.storyboard */; };
+		1F8C91B41C772FD500DD06E7 /* RoundedImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1F8C91B31C772FD500DD06E7 /* RoundedImageView.m */; };
+		1F8C91BA1C7730C800DD06E7 /* UIColor+SLAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = 1F8C91B71C7730C800DD06E7 /* UIColor+SLAddition.m */; };
+		1F8C91BB1C7730C800DD06E7 /* UIScrollView+UpdateContentSize.m in Sources */ = {isa = PBXBuildFile; fileRef = 1F8C91B91C7730C800DD06E7 /* UIScrollView+UpdateContentSize.m */; };
+		1F8C91C01C773B9B00DD06E7 /* dp_holder_large.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F8C91BD1C773B9B00DD06E7 /* dp_holder_large.png */; };
+		1F8C91C11C773B9B00DD06E7 /* dp_holder_large@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F8C91BE1C773B9B00DD06E7 /* dp_holder_large@2x.png */; };
+		1F8C91C21C773B9B00DD06E7 /* profile_pic.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 1F8C91BF1C773B9B00DD06E7 /* profile_pic.jpg */; };
 		1FF39CCD1C6E06EE00268455 /* OnboardingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FF39CCA1C6E06EE00268455 /* OnboardingView.m */; };
 		1FF39CCE1C6E06EE00268455 /* OnboardingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FF39CCC1C6E06EE00268455 /* OnboardingViewController.m */; };
 		DA8006A8D2C76E8BDF00E006 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D1B17268DBC371C29650F39 /* libPods.a */; };
@@ -35,6 +41,15 @@
 		1F6433A21C6EFEA9009D4D13 /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
 		1F6433A31C6EFEA9009D4D13 /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
 		1F6433A61C6F0278009D4D13 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		1F8C91B21C772FD500DD06E7 /* RoundedImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoundedImageView.h; sourceTree = "<group>"; };
+		1F8C91B31C772FD500DD06E7 /* RoundedImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoundedImageView.m; sourceTree = "<group>"; };
+		1F8C91B61C7730C800DD06E7 /* UIColor+SLAddition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+SLAddition.h"; sourceTree = "<group>"; };
+		1F8C91B71C7730C800DD06E7 /* UIColor+SLAddition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+SLAddition.m"; sourceTree = "<group>"; };
+		1F8C91B81C7730C800DD06E7 /* UIScrollView+UpdateContentSize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+UpdateContentSize.h"; sourceTree = "<group>"; };
+		1F8C91B91C7730C800DD06E7 /* UIScrollView+UpdateContentSize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+UpdateContentSize.m"; sourceTree = "<group>"; };
+		1F8C91BD1C773B9B00DD06E7 /* dp_holder_large.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dp_holder_large.png; sourceTree = "<group>"; };
+		1F8C91BE1C773B9B00DD06E7 /* dp_holder_large@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dp_holder_large@2x.png"; sourceTree = "<group>"; };
+		1F8C91BF1C773B9B00DD06E7 /* profile_pic.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = profile_pic.jpg; sourceTree = "<group>"; };
 		1FF39CC91C6E06EE00268455 /* OnboardingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnboardingView.h; sourceTree = "<group>"; };
 		1FF39CCA1C6E06EE00268455 /* OnboardingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OnboardingView.m; sourceTree = "<group>"; };
 		1FF39CCB1C6E06EE00268455 /* OnboardingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnboardingViewController.h; sourceTree = "<group>"; };
@@ -77,6 +92,9 @@
 		1F1055F81C6B775700961B16 /* tinder */ = {
 			isa = PBXGroup;
 			children = (
+				1F8C91BC1C773B9B00DD06E7 /* Images */,
+				1F8C91B51C7730C800DD06E7 /* Categories */,
+				1F8C91B11C772FD500DD06E7 /* RoundedImageView */,
 				1F6433A01C6EFE4C009D4D13 /* Menu View Controllers */,
 				1F64339C1C6E3F1E009D4D13 /* Resources */,
 				1F64339A1C6E240D009D4D13 /* Constants */,
@@ -141,6 +159,36 @@
 				1F6433A31C6EFEA9009D4D13 /* MainViewController.m */,
 			);
 			name = "Main VC";
+			sourceTree = "<group>";
+		};
+		1F8C91B11C772FD500DD06E7 /* RoundedImageView */ = {
+			isa = PBXGroup;
+			children = (
+				1F8C91B21C772FD500DD06E7 /* RoundedImageView.h */,
+				1F8C91B31C772FD500DD06E7 /* RoundedImageView.m */,
+			);
+			path = RoundedImageView;
+			sourceTree = "<group>";
+		};
+		1F8C91B51C7730C800DD06E7 /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				1F8C91B61C7730C800DD06E7 /* UIColor+SLAddition.h */,
+				1F8C91B71C7730C800DD06E7 /* UIColor+SLAddition.m */,
+				1F8C91B81C7730C800DD06E7 /* UIScrollView+UpdateContentSize.h */,
+				1F8C91B91C7730C800DD06E7 /* UIScrollView+UpdateContentSize.m */,
+			);
+			path = Categories;
+			sourceTree = "<group>";
+		};
+		1F8C91BC1C773B9B00DD06E7 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				1F8C91BD1C773B9B00DD06E7 /* dp_holder_large.png */,
+				1F8C91BE1C773B9B00DD06E7 /* dp_holder_large@2x.png */,
+				1F8C91BF1C773B9B00DD06E7 /* profile_pic.jpg */,
+			);
+			path = Images;
 			sourceTree = "<group>";
 		};
 		1FF39CC81C6E06A200268455 /* Onboarding */ = {
@@ -231,7 +279,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1F8C91C01C773B9B00DD06E7 /* dp_holder_large.png in Resources */,
 				1F1056091C6B775700961B16 /* LaunchScreen.storyboard in Resources */,
+				1F8C91C11C773B9B00DD06E7 /* dp_holder_large@2x.png in Resources */,
+				1F8C91C21C773B9B00DD06E7 /* profile_pic.jpg in Resources */,
 				1F64339E1C6E3F29009D4D13 /* PTSerif.ttc in Resources */,
 				1F1056061C6B775700961B16 /* Assets.xcassets in Resources */,
 				1F6433A71C6F0278009D4D13 /* Main.storyboard in Resources */,
@@ -293,12 +344,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1F8C91B41C772FD500DD06E7 /* RoundedImageView.m in Sources */,
 				1FF39CCD1C6E06EE00268455 /* OnboardingView.m in Sources */,
+				1F8C91BA1C7730C800DD06E7 /* UIColor+SLAddition.m in Sources */,
 				1F6433A41C6EFEA9009D4D13 /* MainViewController.m in Sources */,
 				1F1055FE1C6B775700961B16 /* AppDelegate.m in Sources */,
 				1FF39CCE1C6E06EE00268455 /* OnboardingViewController.m in Sources */,
 				1F6433991C6E23C9009D4D13 /* UIView+Extensions.m in Sources */,
 				1F1055FB1C6B775700961B16 /* main.m in Sources */,
+				1F8C91BB1C7730C800DD06E7 /* UIScrollView+UpdateContentSize.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
