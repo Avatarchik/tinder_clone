@@ -5,31 +5,41 @@ PODS:
   - Bolts/AppLinks (1.6.0):
     - Bolts/Tasks
   - Bolts/Tasks (1.6.0)
-  - FBSDKCoreKit (4.9.1):
-    - Bolts (~> 1.5)
-  - FBSDKLoginKit (4.9.1):
-    - FBSDKCoreKit
+  - Facebook-iOS-SDK (3.24.2):
+    - Bolts (~> 1.2)
+  - JSMessagesViewController (4.0.5):
+    - JSQSystemSoundPlayer (~> 1.0)
+  - JSQSystemSoundPlayer (1.5.2)
+  - MDCSwipeToChoose (0.2.3)
   - Parse (1.12.0):
     - Bolts/Tasks (~> 1.5)
-  - ParseFacebookUtilsV4 (1.11.0):
-    - Bolts/Tasks (>= 1.5)
-    - FBSDKCoreKit (~> 4.9.0-beta)
-    - FBSDKLoginKit (~> 4.9.0-beta)
-    - FBSDKTVOSKit (~> 4.9.0-beta)
-    - Parse (~> 1.11)
+  - ParseFacebookUtils (1.10.0):
+    - Bolts/Tasks (~> 1.5)
+    - Facebook-iOS-SDK (~> 3.24)
+    - Parse (~> 1.9)
+  - PathCover (0.1.2)
+  - PulsingHalo (0.0.1)
   - SLPagingView (0.0.5)
 
 DEPENDENCIES:
+  - JSMessagesViewController
+  - MDCSwipeToChoose (~> 0.2)
   - Parse (~> 1.12)
-  - ParseFacebookUtilsV4 (~> 1.11)
+  - ParseFacebookUtils (~> 1.10)
+  - PathCover (~> 0.1)
+  - PulsingHalo
   - SLPagingView
 
 SPEC CHECKSUMS:
   Bolts: f52a250053bb517ca874523c3913776359ab3def
-  FBSDKCoreKit: aee20b6d9855f15b618d4fddd1a5ad45f5a4a59d
-  FBSDKLoginKit: ec22dc49bd372b064e93d6773df4ffefb3a552a2
+  Facebook-iOS-SDK: 2b76db4e29be113e211b464f7cc8c6a4b5a5a7d9
+  JSMessagesViewController: f4e96ca5c1b626df2be325f60b9f4f51f991fbfe
+  JSQSystemSoundPlayer: 443466bd5f4537d0b7f15a0184244169ae65f8e5
+  MDCSwipeToChoose: 56239d98b4558c66e7c3c9069482befd26092270
   Parse: de2c52a9a1421b91ae7594ab8ce191afd184f19b
-  ParseFacebookUtilsV4: 216e03bd560404eed09a4875c75f0c1cdf758070
+  ParseFacebookUtils: 7030f53c989fda36ad50029d90edec1327424317
+  PathCover: 2cea41d7c2a315d72827a35e984ba65b67c1eafc
+  PulsingHalo: 1583823bd6c989fff3469bb417bc42f0d268f98e
   SLPagingView: ba9bb6102cb318ce56f23d0a7e49a46ddcdad7e3
 
 COCOAPODS: 0.39.0

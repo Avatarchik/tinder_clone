@@ -9,12 +9,22 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>FBSDKCoreKit.xcscheme</key>
+		<key>Facebook-iOS-SDK.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>FBSDKLoginKit.xcscheme</key>
+		<key>JSMessagesViewController.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>JSQSystemSoundPlayer.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>MDCSwipeToChoose.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -24,12 +34,22 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>ParseFacebookUtilsV4.xcscheme</key>
+		<key>ParseFacebookUtils.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>PathCover.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
 		<key>Pods.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>PulsingHalo.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -42,22 +62,32 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>1FE03713A4E1ECED8850536CFB1F40B2</key>
+		<key>400104AABD28821833A35CBE5D78CFF1</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>39770F9070ADB756E6776447136C47A8</key>
+		<key>451159A61A53A632D3BE833110393835</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>4E286D373D75563CE26E479A68203892</key>
+		<key>59C7B884335BF97F71D38DBB38D1EF2A</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>81D7FE2A0FD9258247B1232874B837DA</key>
+		<key>5F485A508CE4441A3F85B5C9BACA3C8F</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>61160B186AA12CE0B325145C30B1B890</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>9A7B3EC56C791BE78C1EFE569A1CEA3A</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -67,12 +97,22 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>A8526AA34ABFB99A5D4677997F6CC1B9</key>
+		<key>B65C8216B36B29CE9EADE30DD845AFCE</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
 		<key>F21523DE0EE1E35B265242490D97EE4C</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>F2569F649F0DB67183DE460E3850D380</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>F31ED21B2335ED35603D341F214C7F2A</key>
 		<dict>
 			<key>primary</key>
 			<true/>

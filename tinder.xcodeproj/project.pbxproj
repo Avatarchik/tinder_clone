@@ -15,12 +15,24 @@
 		1F64339E1C6E3F29009D4D13 /* PTSerif.ttc in Resources */ = {isa = PBXBuildFile; fileRef = 1F64339D1C6E3F29009D4D13 /* PTSerif.ttc */; };
 		1F6433A41C6EFEA9009D4D13 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1F6433A31C6EFEA9009D4D13 /* MainViewController.m */; };
 		1F6433A71C6F0278009D4D13 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1F6433A51C6F0278009D4D13 /* Main.storyboard */; };
+		1F8B6AD61C7D466000A9AC11 /* 列表图片@2x.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 1F8B6AD51C7D466000A9AC11 /* 列表图片@2x.jpg */; };
 		1F8C91B41C772FD500DD06E7 /* RoundedImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1F8C91B31C772FD500DD06E7 /* RoundedImageView.m */; };
 		1F8C91BA1C7730C800DD06E7 /* UIColor+SLAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = 1F8C91B71C7730C800DD06E7 /* UIColor+SLAddition.m */; };
 		1F8C91BB1C7730C800DD06E7 /* UIScrollView+UpdateContentSize.m in Sources */ = {isa = PBXBuildFile; fileRef = 1F8C91B91C7730C800DD06E7 /* UIScrollView+UpdateContentSize.m */; };
 		1F8C91C01C773B9B00DD06E7 /* dp_holder_large.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F8C91BD1C773B9B00DD06E7 /* dp_holder_large.png */; };
 		1F8C91C11C773B9B00DD06E7 /* dp_holder_large@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F8C91BE1C773B9B00DD06E7 /* dp_holder_large@2x.png */; };
 		1F8C91C21C773B9B00DD06E7 /* profile_pic.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 1F8C91BF1C773B9B00DD06E7 /* profile_pic.jpg */; };
+		1F8F3DCD1C7F587F005950DB /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1F8F3DCC1C7F587F005950DB /* ChatViewController.m */; };
+		1FA661F71C7D4D9400411D96 /* ChoosePersonView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FA661F41C7D4D9400411D96 /* ChoosePersonView.m */; };
+		1FA661F81C7D4D9400411D96 /* ImageLabelView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FA661F61C7D4D9400411D96 /* ImageLabelView.m */; };
+		1FA661FC1C7D4DBA00411D96 /* Person.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FA661FB1C7D4DBA00411D96 /* Person.m */; };
+		1FA661FE1C7D4EE700411D96 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1FA661FD1C7D4EE700411D96 /* UIKit.framework */; };
+		1FA662001C7D4EFF00411D96 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1FA661FF1C7D4EFF00411D96 /* Foundation.framework */; };
+		1FA662021C7D4F0600411D96 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1FA662011C7D4F0600411D96 /* CoreGraphics.framework */; };
+		1FA662061C7D506400411D96 /* ChoosePersonViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FA662051C7D506400411D96 /* ChoosePersonViewController.m */; };
+		1FA662081C7D968000411D96 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1FA662071C7D968000411D96 /* CoreLocation.framework */; };
+		1FA6620C1C7D99C900411D96 /* CLLocationManager+blocks.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FA6620B1C7D99C900411D96 /* CLLocationManager+blocks.m */; };
+		1FA6620F1C7E07D500411D96 /* TnderConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FA6620E1C7E07D500411D96 /* TnderConstants.m */; };
 		1FF39CCD1C6E06EE00268455 /* OnboardingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FF39CCA1C6E06EE00268455 /* OnboardingView.m */; };
 		1FF39CCE1C6E06EE00268455 /* OnboardingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1FF39CCC1C6E06EE00268455 /* OnboardingViewController.m */; };
 		DA8006A8D2C76E8BDF00E006 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D1B17268DBC371C29650F39 /* libPods.a */; };
@@ -41,6 +53,7 @@
 		1F6433A21C6EFEA9009D4D13 /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
 		1F6433A31C6EFEA9009D4D13 /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
 		1F6433A61C6F0278009D4D13 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		1F8B6AD51C7D466000A9AC11 /* 列表图片@2x.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "列表图片@2x.jpg"; sourceTree = "<group>"; };
 		1F8C91B21C772FD500DD06E7 /* RoundedImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoundedImageView.h; sourceTree = "<group>"; };
 		1F8C91B31C772FD500DD06E7 /* RoundedImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoundedImageView.m; sourceTree = "<group>"; };
 		1F8C91B61C7730C800DD06E7 /* UIColor+SLAddition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+SLAddition.h"; sourceTree = "<group>"; };
@@ -50,6 +63,24 @@
 		1F8C91BD1C773B9B00DD06E7 /* dp_holder_large.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dp_holder_large.png; sourceTree = "<group>"; };
 		1F8C91BE1C773B9B00DD06E7 /* dp_holder_large@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dp_holder_large@2x.png"; sourceTree = "<group>"; };
 		1F8C91BF1C773B9B00DD06E7 /* profile_pic.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = profile_pic.jpg; sourceTree = "<group>"; };
+		1F8F3DCB1C7F587F005950DB /* ChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatViewController.h; sourceTree = "<group>"; };
+		1F8F3DCC1C7F587F005950DB /* ChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatViewController.m; sourceTree = "<group>"; };
+		1FA661F31C7D4D9400411D96 /* ChoosePersonView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChoosePersonView.h; sourceTree = "<group>"; };
+		1FA661F41C7D4D9400411D96 /* ChoosePersonView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChoosePersonView.m; sourceTree = "<group>"; };
+		1FA661F51C7D4D9400411D96 /* ImageLabelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageLabelView.h; sourceTree = "<group>"; };
+		1FA661F61C7D4D9400411D96 /* ImageLabelView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageLabelView.m; sourceTree = "<group>"; };
+		1FA661FA1C7D4DBA00411D96 /* Person.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Person.h; sourceTree = "<group>"; };
+		1FA661FB1C7D4DBA00411D96 /* Person.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Person.m; sourceTree = "<group>"; };
+		1FA661FD1C7D4EE700411D96 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		1FA661FF1C7D4EFF00411D96 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		1FA662011C7D4F0600411D96 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		1FA662041C7D506400411D96 /* ChoosePersonViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChoosePersonViewController.h; sourceTree = "<group>"; };
+		1FA662051C7D506400411D96 /* ChoosePersonViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChoosePersonViewController.m; sourceTree = "<group>"; };
+		1FA662071C7D968000411D96 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		1FA6620A1C7D99C900411D96 /* CLLocationManager+blocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CLLocationManager+blocks.h"; sourceTree = "<group>"; };
+		1FA6620B1C7D99C900411D96 /* CLLocationManager+blocks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CLLocationManager+blocks.m"; sourceTree = "<group>"; };
+		1FA6620D1C7E07D500411D96 /* TinderConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TinderConstants.h; sourceTree = "<group>"; };
+		1FA6620E1C7E07D500411D96 /* TnderConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TnderConstants.m; sourceTree = "<group>"; };
 		1FF39CC91C6E06EE00268455 /* OnboardingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnboardingView.h; sourceTree = "<group>"; };
 		1FF39CCA1C6E06EE00268455 /* OnboardingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OnboardingView.m; sourceTree = "<group>"; };
 		1FF39CCB1C6E06EE00268455 /* OnboardingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OnboardingViewController.h; sourceTree = "<group>"; };
@@ -64,6 +95,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1FA662081C7D968000411D96 /* CoreLocation.framework in Frameworks */,
+				1FA662021C7D4F0600411D96 /* CoreGraphics.framework in Frameworks */,
+				1FA662001C7D4EFF00411D96 /* Foundation.framework in Frameworks */,
+				1FA661FE1C7D4EE700411D96 /* UIKit.framework in Frameworks */,
 				DA8006A8D2C76E8BDF00E006 /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -131,6 +166,8 @@
 		1F64339A1C6E240D009D4D13 /* Constants */ = {
 			isa = PBXGroup;
 			children = (
+				1FA6620D1C7E07D500411D96 /* TinderConstants.h */,
+				1FA6620E1C7E07D500411D96 /* TnderConstants.m */,
 				1F64339B1C6E2418009D4D13 /* TinderConstants.pch */,
 			);
 			name = Constants;
@@ -147,6 +184,8 @@
 		1F6433A01C6EFE4C009D4D13 /* Menu View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				1F8F3DCA1C7F45E5005950DB /* Chat VC */,
+				1F8B6ACE1C7D3EF800A9AC11 /* Setting VC */,
 				1F6433A11C6EFE63009D4D13 /* Main VC */,
 			);
 			name = "Menu View Controllers";
@@ -155,10 +194,20 @@
 		1F6433A11C6EFE63009D4D13 /* Main VC */ = {
 			isa = PBXGroup;
 			children = (
+				1FA662031C7D506400411D96 /* Controllers */,
+				1FA661F91C7D4DBA00411D96 /* Models */,
+				1FA661F21C7D4D9400411D96 /* Views */,
 				1F6433A21C6EFEA9009D4D13 /* MainViewController.h */,
 				1F6433A31C6EFEA9009D4D13 /* MainViewController.m */,
 			);
 			name = "Main VC";
+			sourceTree = "<group>";
+		};
+		1F8B6ACE1C7D3EF800A9AC11 /* Setting VC */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "Setting VC";
 			sourceTree = "<group>";
 		};
 		1F8C91B11C772FD500DD06E7 /* RoundedImageView */ = {
@@ -184,6 +233,7 @@
 		1F8C91BC1C773B9B00DD06E7 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				1F8B6AD51C7D466000A9AC11 /* 列表图片@2x.jpg */,
 				1F8C91BD1C773B9B00DD06E7 /* dp_holder_large.png */,
 				1F8C91BE1C773B9B00DD06E7 /* dp_holder_large@2x.png */,
 				1F8C91BF1C773B9B00DD06E7 /* profile_pic.jpg */,
@@ -191,9 +241,57 @@
 			path = Images;
 			sourceTree = "<group>";
 		};
+		1F8F3DCA1C7F45E5005950DB /* Chat VC */ = {
+			isa = PBXGroup;
+			children = (
+				1F8F3DCB1C7F587F005950DB /* ChatViewController.h */,
+				1F8F3DCC1C7F587F005950DB /* ChatViewController.m */,
+			);
+			name = "Chat VC";
+			sourceTree = "<group>";
+		};
+		1FA661F21C7D4D9400411D96 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				1FA661F31C7D4D9400411D96 /* ChoosePersonView.h */,
+				1FA661F41C7D4D9400411D96 /* ChoosePersonView.m */,
+				1FA661F51C7D4D9400411D96 /* ImageLabelView.h */,
+				1FA661F61C7D4D9400411D96 /* ImageLabelView.m */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		1FA661F91C7D4DBA00411D96 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				1FA661FA1C7D4DBA00411D96 /* Person.h */,
+				1FA661FB1C7D4DBA00411D96 /* Person.m */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		1FA662031C7D506400411D96 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				1FA662041C7D506400411D96 /* ChoosePersonViewController.h */,
+				1FA662051C7D506400411D96 /* ChoosePersonViewController.m */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		1FA662091C7D99C900411D96 /* CLLocationManager-blocks */ = {
+			isa = PBXGroup;
+			children = (
+				1FA6620A1C7D99C900411D96 /* CLLocationManager+blocks.h */,
+				1FA6620B1C7D99C900411D96 /* CLLocationManager+blocks.m */,
+			);
+			path = "CLLocationManager-blocks";
+			sourceTree = "<group>";
+		};
 		1FF39CC81C6E06A200268455 /* Onboarding */ = {
 			isa = PBXGroup;
 			children = (
+				1FA662091C7D99C900411D96 /* CLLocationManager-blocks */,
 				1FF39CC91C6E06EE00268455 /* OnboardingView.h */,
 				1FF39CCA1C6E06EE00268455 /* OnboardingView.m */,
 				1FF39CCB1C6E06EE00268455 /* OnboardingViewController.h */,
@@ -205,6 +303,10 @@
 		59ACC29C38385BE6270ABFCE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1FA662071C7D968000411D96 /* CoreLocation.framework */,
+				1FA662011C7D4F0600411D96 /* CoreGraphics.framework */,
+				1FA661FF1C7D4EFF00411D96 /* Foundation.framework */,
+				1FA661FD1C7D4EE700411D96 /* UIKit.framework */,
 				2D1B17268DBC371C29650F39 /* libPods.a */,
 			);
 			name = Frameworks;
@@ -279,6 +381,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1F8B6AD61C7D466000A9AC11 /* 列表图片@2x.jpg in Resources */,
 				1F8C91C01C773B9B00DD06E7 /* dp_holder_large.png in Resources */,
 				1F1056091C6B775700961B16 /* LaunchScreen.storyboard in Resources */,
 				1F8C91C11C773B9B00DD06E7 /* dp_holder_large@2x.png in Resources */,
@@ -344,15 +447,22 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1FA661F81C7D4D9400411D96 /* ImageLabelView.m in Sources */,
+				1FA6620C1C7D99C900411D96 /* CLLocationManager+blocks.m in Sources */,
 				1F8C91B41C772FD500DD06E7 /* RoundedImageView.m in Sources */,
+				1FA661FC1C7D4DBA00411D96 /* Person.m in Sources */,
+				1FA6620F1C7E07D500411D96 /* TnderConstants.m in Sources */,
 				1FF39CCD1C6E06EE00268455 /* OnboardingView.m in Sources */,
 				1F8C91BA1C7730C800DD06E7 /* UIColor+SLAddition.m in Sources */,
 				1F6433A41C6EFEA9009D4D13 /* MainViewController.m in Sources */,
 				1F1055FE1C6B775700961B16 /* AppDelegate.m in Sources */,
 				1FF39CCE1C6E06EE00268455 /* OnboardingViewController.m in Sources */,
 				1F6433991C6E23C9009D4D13 /* UIView+Extensions.m in Sources */,
+				1FA661F71C7D4D9400411D96 /* ChoosePersonView.m in Sources */,
 				1F1055FB1C6B775700961B16 /* main.m in Sources */,
 				1F8C91BB1C7730C800DD06E7 /* UIScrollView+UpdateContentSize.m in Sources */,
+				1F8F3DCD1C7F587F005950DB /* ChatViewController.m in Sources */,
+				1FA662061C7D506400411D96 /* ChoosePersonViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -463,10 +573,12 @@
 			baseConfigurationReference = C34991B91D1C3D1E5E29653F /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer: DAVID CASTILLO (DZ95NVZED8)";
 				INFOPLIST_FILE = tinder/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.jacky.tinder;
+				PRODUCT_BUNDLE_IDENTIFIER = com.idolstarfan.developer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "ff728edf-b43e-4995-a59c-d010507ae4fd";
 			};
 			name = Debug;
 		};
@@ -475,10 +587,12 @@
 			baseConfigurationReference = 7A4EEBCC25397F68372B110D /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer: DAVID CASTILLO (DZ95NVZED8)";
 				INFOPLIST_FILE = tinder/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.jacky.tinder;
+				PRODUCT_BUNDLE_IDENTIFIER = com.idolstarfan.developer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "ff728edf-b43e-4995-a59c-d010507ae4fd";
 			};
 			name = Release;
 		};

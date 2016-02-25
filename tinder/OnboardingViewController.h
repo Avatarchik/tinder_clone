@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "AppDelegate.h"
 
-@interface OnboardingViewController : UIViewController
+@interface OnboardingViewController : UIViewController <NSURLConnectionDataDelegate>
 
 -(void)LogIned;
 

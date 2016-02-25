@@ -8,10 +8,10 @@
 
 #import "AppDelegate.h"
 #import "OnboardingViewController.h"
-#import <FBSDKCoreKit/FBSDKCoreKit.h>
-#import <Parse/Parse.h>
-#import <ParseFacebookUtilsV4/PFFacebookUtils.h>
 #import "MainViewController.h"
+
+#import <Parse/Parse.h>
+#import <ParseFacebookUtils/PFFacebookUtils.h>
 
 @interface AppDelegate (){
     
@@ -31,10 +31,13 @@
     [Parse setApplicationId:@"9M1NfC5lh6pWQGuSK59ahtC6XSUpxh9CMO79Zrpl" clientKey:@"s1K7EY2FEyjTVQ4lkTGQwg7I33FajWNkHyr3staY"];
     
     //---------------------------------------------------------------------------------------------------------------------------------------------
-    [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
     
+    [PFFacebookUtils initializeFacebook];
     
-    [PFFacebookUtils initializeFacebookWithApplicationLaunchOptions:launchOptions];
+//    [PFAnalytics trackAppOpenedWithLaunchOptions:launchOptions];
+    
+//    PFFacebookUtilsV4 Using
+//    [PFFacebookUtils initializeFacebookWithApplicationLaunchOptions:launchOptions];
     //----------------------------------------------------------------------------------------------------------
     
     
@@ -77,7 +80,7 @@
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     
-    [FBSDKAppEvents activateApp];
+//    [FBSDKAppEvents activateApp];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
@@ -88,10 +91,11 @@
             openURL:(NSURL *)url
   sourceApplication:(NSString *)sourceApplication
          annotation:(id)annotation {
-    return [[FBSDKApplicationDelegate sharedInstance] application:application
-                                                          openURL:url
-                                                sourceApplication:sourceApplication
-                                                       annotation:annotation];
+//    return [[FBSDKApplicationDelegate sharedInstance] application:application
+//                                                          openURL:url
+//                                                sourceApplication:sourceApplication
+//                                                       annotation:annotation];
+    return [FBAppCall handleOpenURL:url sourceApplication:sourceApplication withSession:[PFFacebookUtils session]];
 }
 
 @end

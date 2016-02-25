@@ -9,8 +9,9 @@
 #import "OnboardingViewController.h"
 
 #import <QuartzCore/QuartzCore.h>
-#import <ParseFacebookUtilsV4/PFFacebookUtils.h>
+
 #import <Parse/Parse.h>
+#import <ParseFacebookUtils/PFFacebookUtils.h>
 
 #import "UIView+Extensions.h"
 #import "OnboardingView.h"
@@ -22,6 +23,16 @@
 #import "RoundedImageView.h"
 #import "UIColor+SLAddition.h"
 
+#import "ChoosePersonViewController.h"
+
+#import <CoreLocation/CoreLocation.h>
+#import "CLLocationManager+blocks.h"
+
+#import "TinderConstants.h"
+#import <PulsingHalo/PulsingHaloLayer.h>
+
+#import "RoundedImageView/RoundedImageView.h"
+
 @interface OnboardingViewController () <UIScrollViewDelegate>
 @property (nonatomic) UIButton *fbLogin;
 @property (nonatomic) UIScrollView *scrollView;
@@ -32,6 +43,16 @@
 @property (nonatomic) UIButton *privacyButton;
 @property (nonatomic) UIButton *closeButton;
 @property (nonatomic) UIButton *infoButton;
+
+@property (nonatomic, strong) CLLocationManager *manager;
+
+@property (strong, nonatomic) NSMutableData *imageData;
+
+@property (nonatomic, weak) PulsingHaloLayer *halo;
+
+@property (nonatomic) UITableView *uiTable;
+
+@property (nonatomic) UIActivityIndicatorView *activityIndicator;
 
 @end
 
@@ -47,6 +68,27 @@
     [self addPageControl];
     
     [self initialAnimation];
+    
+    PulsingHaloLayer *layer = [PulsingHaloLayer layer];
+    
+    self.halo = layer;
+    self.halo.hidden = YES;
+    
+    self.activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    self.activityIndicator.center = CGPointMake(self.view.center.x, self.view.center.y);
+    
+    self.activityIndicator.hidden = YES;
+    
+     [self.view.layer insertSublayer:self.halo above:self.view.layer];
+    
+    self.manager = [CLLocationManager updateManagerWithAccuracy:50.0 locationAge:15.0 authorizationDesciption:CLLocationUpdateAuthorizationDescriptionAlways];
+    
+    if ([CLLocationManager isLocationUpdatesAvailable]) {
+        [self.manager startUpdatingLocationWithUpdateBlock:^(CLLocationManager *manager, CLLocation *location, NSError *error, BOOL *stopUpdating) {
+            NSLog(@"Our new location: %@", location);
+            *stopUpdating = YES;
+        }];
+    }
 }
 
 - (void)initialAnimation {
@@ -246,60 +288,137 @@
     [self.mainView addSubview:self.pageControl];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-#pragma mark - ScrollView delegate methods
-
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView  {
-    CGFloat pageWidth = self.scrollView.frame.size.width;
-    float fractionalPage = self.scrollView.contentOffset.x / pageWidth;
-    NSInteger page = lround(fractionalPage);
-    self.pageControl.currentPage = page;
-}
-
 #pragma mark - Button Actions
 - (void)FBLoginButtonPressed:(UIButton *)sender {
-//    PFUser *user = [PFUser user];
-//    user.username = @"jacky";
-//    user.password = @"jacky";
-//    user.email = @"email@gmail.com";
-//    
-//    user[@"phone"] = @"650-500-0000";
-//    
-//    [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
-//        if (!error) {
-//            // hoooo
-//        } else
-//        {
-//            NSString *errorString = [error userInfo][@"error"];
-//        }
-//    }];
+    self.activityIndicator.hidden = NO;
+    [self.activityIndicator startAnimating];
     [self _loginWithFacebook];
 }
 
 - (void)_loginWithFacebook {
-    // Set permissions required from the facebook user account
-    NSArray *permissionsArray = @[ @"user_about_me", @"user_relationships", @"user_birthday", @"user_location"];
+
+    NSArray *permissionsArray = @[@"user_about_me", @"user_birthday", @"user_location"];
     
-    // Login PFUser using Facebook
-    [PFFacebookUtils logInInBackgroundWithReadPermissions:permissionsArray block:^(PFUser *user, NSError *error) {
+    [PFFacebookUtils logInWithPermissions:permissionsArray block:^(PFUser *user, NSError *error) {
+        [self.activityIndicator stopAnimating];
+        self.activityIndicator.hidden = YES;
+        
         if (!user) {
-        [self FBSignAlert:@"Uh oh. The user cancelled the Facebook login."];
-            
-        } else if (user.isNew) {
-//            [self FBSignAlert:@"User signed up and logged in through Facebook!"];
-            [self LogIned];
-            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"isLoggedIn"];
+            if (!error) {
+                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Log In Error" message:@"The Facebook Login was Canceled" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+                [alertView show];
+            } else {
+                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Log In Error" message:[error description] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+                [alertView show];
+            }
         } else {
-//            [self FBSignAlert:@"User logged in through Facebook!"];
+            [self updateUserInformation];
             [self LogIned];
-            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"isLoggedIn"];
         }
     }];
 }
+
+#pragma mark - Helper Method
+- (void) updateUserInformation {
+    FBRequest *request = [FBRequest requestForMe];
+    [request startWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
+        
+        NSLog(@"result:%@", result);
+        
+        if (!error) {
+            NSDictionary *userDictionary = (NSDictionary *)result;
+            
+            // create URL
+            NSString *facebookID = userDictionary[@"id"];
+            NSURL *pictureURL = [NSURL URLWithString:[NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?width=800&height=800&return_ssl_resources=1",facebookID]];
+            
+            NSMutableDictionary *userProfile = [[NSMutableDictionary alloc] initWithCapacity:8];
+            if (userDictionary[@"name"]) {
+                userProfile[kYIUserProfileNameKey] = userDictionary[@"name"];
+            }
+            if (userDictionary[@"first_name"]) {
+                userProfile[kYIUserProfileFirstNameKey] = userDictionary[@"first_name"];
+            }
+            if (userDictionary[@"location"][@"name"]) {
+                userProfile[kYIUserProfileLocationKey] = userDictionary[@"location"][@"name"];
+            }
+            if (userDictionary[@"gender"]) {
+                userProfile[kYIUserProfileGenderKey] = userDictionary[@"gender"];
+            }
+            if (userDictionary[@"birthday"]) {
+                userProfile[kYIUserProfileBirthdayKey] = userDictionary[@"birthday"];
+                NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+                [formatter setDateStyle:NSDateFormatterShortStyle];
+                NSDate *date = [formatter dateFromString:userDictionary[@"birthday"]];
+                NSDate *now = [NSDate date];
+                NSTimeInterval seconds = [now timeIntervalSinceDate:date];
+                int age = seconds / 31536000;
+                userProfile[kYIUserProfileAgeKey] = @(age);  //converts age into NSNumber
+            }
+            
+            if ([pictureURL absoluteString]) {
+                userProfile[kYIUserProfilePictureURL] = [pictureURL absoluteString];
+            }
+            
+            [[PFUser currentUser] setObject:userProfile forKey:kYIUserProfileKey];
+            [[PFUser currentUser] saveInBackground];
+            [self requestImage];
+        } else {
+            NSLog(@"Error in FB request:%@", error);
+        }
+    }];
+    
+}
+
+// create PFFile with image and upload it
+- (void) uploadPFFileToParse:(UIImage *)image {
+    NSData *imageData = UIImageJPEGRepresentation(image, 0.8);
+    if (!imageData) {
+        NSLog(@"imageData was not found");
+        return;
+    }
+    PFFile *photoFile = [PFFile fileWithData:imageData];
+    [photoFile saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        if (succeeded) {
+            PFObject *photo = [PFObject objectWithClassName:kYIPhotoClassKey];
+            [photo setObject:[PFUser currentUser] forKey:kYIPhotoUserKey];
+            [photo setObject:photoFile forKey:kYIPhotoPictureKey];
+            [photo saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                NSLog(@"Photo saved sucessfully");
+            }];
+        }
+    }];
+}
+
+- (void) requestImage {
+    PFQuery *query = [PFQuery queryWithClassName:kYIPhotoClassKey];
+    [query whereKey:kYIPhotoUserKey equalTo:[PFUser currentUser]]; // only get photos back from current user
+    
+    [query countObjectsInBackgroundWithBlock:^(int number, NSError *error) {
+        if (number == 0) {
+            PFUser *user = [PFUser currentUser];
+            self.imageData = [[NSMutableData alloc] init];
+            
+            NSURL *profilePictureURL = [NSURL URLWithString:user[kYIUserProfileKey][kYIUserProfilePictureURL]];
+            NSURLRequest *urlRequest = [NSURLRequest requestWithURL:profilePictureURL cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:4.0f];
+            NSURLConnection *urlConnection  = [[NSURLConnection alloc] initWithRequest:urlRequest delegate:self];
+            if (!urlConnection) {
+                NSLog(@"Failed to download picture");
+            }
+        }
+    }];
+}
+
+#pragma mark - NSURLConnectionData Delegate
+- (void) connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
+    [self.imageData appendData:data];
+}
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
+    UIImage *profileImage = [UIImage imageWithData:self.imageData];
+    [self uploadPFFileToParse:profileImage];
+}
+
+
 
 - (void) LogIned
 {
@@ -317,11 +436,11 @@
     UIImage *img1 = [UIImage imageNamed:@"gear"];
     img1 = [img1 imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     
-    UIImage *img2 = [UIImage imageNamed:@"tinder"];
-    img2 = [img2 imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+//    UIImage *img2 = [UIImage imageNamed:@"tinder"];
+//    img2 = [img2 imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     
-    //    UIcImage *img3 = [UIImage imageNamed:@"tindericon"];
-    //    img3 = [img3 imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    UIImage *img2 = [UIImage imageNamed:@"tindericon"];
+    img2 = [img2 imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     
     UIImage *img4 = [UIImage imageNamed:@"chat"];
     img4 = [img4 imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
@@ -415,14 +534,162 @@
     UIView *v = [UIView new];
     
     v.backgroundColor = [UIColor whiteColor];
+    
+    UIImageView *userPhotoImg = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 160)];
+    // show image
+    userPhotoImg.image = [UIImage imageNamed:@"profile_pic.jpg"];
+    // create effect
+    UIBlurEffect *blur = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
+    // add effect to an effect view
+    UIVisualEffectView *effectView = [[UIVisualEffectView alloc]initWithEffect:blur];
+    effectView.frame = CGRectMake(0, 0, self.view.frame.size.width, 160);
+    // add the effect view to the image view
+    [userPhotoImg addSubview:effectView];
+    
+    RoundedImageView *profileImageView = [[RoundedImageView alloc] initWithFrame:CGRectMake(self.view.center.x-40, 20, 80, 80)];
+    
+    //Configring the rounded imageview by setting appropriate image and offset.
+    profileImageView.imageOffset = 2.5;
+    profileImageView.image = [UIImage imageNamed:@"profile_pic.jpg"];
+    profileImageView.backgroundImage = [UIImage imageNamed:@"dp_holder_large.png"];
+    
+    
+    UILabel *profileNamelbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 70, self.view.frame.size.width, 100)];
+    
+    profileNamelbl.numberOfLines = -1;
+    profileNamelbl.textAlignment = NSTextAlignmentCenter;
+    profileNamelbl.textColor = [UIColor whiteColor];
+    [profileNamelbl setFont:[UIFont boldSystemFontOfSize:16]];
+    
+    profileNamelbl.text = @"Jacky";
+    
+    UILabel *viewProfilelbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 90, self.view.frame.size.width, 100)];
+    
+    viewProfilelbl.numberOfLines = -1;
+    viewProfilelbl.textAlignment = NSTextAlignmentCenter;
+    viewProfilelbl.textColor = [UIColor whiteColor];
+    [viewProfilelbl setFont:[UIFont systemFontOfSize:15]];
+    
+    viewProfilelbl.text = @"view profile";
+    
+    [v addSubview:userPhotoImg];
+    [v addSubview:profileImageView];
+    [v addSubview:profileNamelbl];
+    [v addSubview:viewProfilelbl];
+    
+    CGFloat fPadding = 70.0f;
+    CGFloat fPaddinglbl = 20.0f;
+    
+    UIImageView *discoverstImgView = [[UIImageView alloc] initWithFrame:CGRectMake(20, 180, 30, 30)];
+    discoverstImgView.image = [UIImage imageNamed:@"discovery"];
+    [v addSubview:discoverstImgView];
+    
+    UILabel *discoverystlbl = [[UILabel alloc] initWithFrame:CGRectMake(65, 160, self.view.frame.size.width, 50)];
+    discoverystlbl.numberOfLines = -1;
+    discoverystlbl.textAlignment = NSTextAlignmentLeft;
+    discoverystlbl.textColor = [UIColor blackColor];
+    [discoverystlbl setFont:[UIFont boldSystemFontOfSize:16]];
+    discoverystlbl.text = @"Discovery Settings";
+    [v addSubview:discoverystlbl];
+    
+    UILabel *discoverysubstlbl = [[UILabel alloc] initWithFrame:CGRectMake(65, 160+fPaddinglbl, self.view.frame.size.width, 50)];
+    discoverysubstlbl.numberOfLines = -1;
+    discoverysubstlbl.textAlignment = NSTextAlignmentLeft;
+    discoverysubstlbl.textColor = [UIColor colorWithRed:77/255.0f green:77/255.0f blue:77/255.0f alpha:1.0];
+    [discoverysubstlbl setFont:[UIFont systemFontOfSize:14]];
+    discoverysubstlbl.text = @"Distance, age and more";
+    [v addSubview:discoverysubstlbl];
+    
+    UIView *sperator_v = [[UIView alloc] initWithFrame:CGRectMake(65, 230, self.view.frame.size.width, 1)];
+    sperator_v.backgroundColor = [UIColor colorWithRed:77/255.0f green:77/255.0f blue:77/255.0f alpha:1.0];
+    sperator_v.alpha = 0.2f;
+    [v addSubview:sperator_v];
+    
+    // ---------- //
+    
+    UIImageView *appstImgView = [[UIImageView alloc] initWithFrame:CGRectMake(20, 180+fPadding, 30, 30)];
+    appstImgView.image = [UIImage imageNamed:@"appsetting"];
+    [v addSubview:appstImgView];
+    
+    UILabel *discoverystlbl1 = [[UILabel alloc] initWithFrame:CGRectMake(65, 230, self.view.frame.size.width, 50)];
+    discoverystlbl1.numberOfLines = -1;
+    discoverystlbl1.textAlignment = NSTextAlignmentLeft;
+    discoverystlbl1.textColor = [UIColor blackColor];
+    [discoverystlbl1 setFont:[UIFont boldSystemFontOfSize:16]];
+    discoverystlbl1.text = @"App Settings";
+    [v addSubview:discoverystlbl1];
+    
+    UILabel *discoverysubstlbl1 = [[UILabel alloc] initWithFrame:CGRectMake(65, 230+fPaddinglbl, self.view.frame.size.width, 50)];
+    discoverysubstlbl1.numberOfLines = -1;
+    discoverysubstlbl1.textAlignment = NSTextAlignmentLeft;
+    discoverysubstlbl1.textColor = [UIColor colorWithRed:77/255.0f green:77/255.0f blue:77/255.0f alpha:1.0];
+    [discoverysubstlbl1 setFont:[UIFont systemFontOfSize:14]];
+    discoverysubstlbl1.text = @"Notifications, account and more";
+    [v addSubview:discoverysubstlbl1];
+    
+    UIView *sperator_v1 = [[UIView alloc] initWithFrame:CGRectMake(65, 230+fPadding, self.view.frame.size.width, 1)];
+    sperator_v1.backgroundColor = [UIColor colorWithRed:77/255.0f green:77/255.0f blue:77/255.0f alpha:1.0];
+    sperator_v1.alpha = 0.2f;
+    [v addSubview:sperator_v1];
+    
+    // ------------ //
+    
+    UIImageView *helpstImgView = [[UIImageView alloc] initWithFrame:CGRectMake(20, 180+fPadding*2, 30, 30)];
+    helpstImgView.image = [UIImage imageNamed:@"help"];
+    [v addSubview:helpstImgView];
+    
+    UILabel *discoverystlbl2 = [[UILabel alloc] initWithFrame:CGRectMake(65, 300, self.view.frame.size.width, 50)];
+    discoverystlbl2.numberOfLines = -1;
+    discoverystlbl2.textAlignment = NSTextAlignmentLeft;
+    discoverystlbl2.textColor = [UIColor blackColor];
+    [discoverystlbl2 setFont:[UIFont boldSystemFontOfSize:16]];
+    discoverystlbl2.text = @"Help & Support";
+    [v addSubview:discoverystlbl2];
+    
+    UILabel *discoverysubstlbl2 = [[UILabel alloc] initWithFrame:CGRectMake(65, 300+fPaddinglbl, self.view.frame.size.width, 50)];
+    discoverysubstlbl2.numberOfLines = -1;
+    discoverysubstlbl2.textAlignment = NSTextAlignmentLeft;
+    discoverysubstlbl2.textColor = [UIColor colorWithRed:77/255.0f green:77/255.0f blue:77/255.0f alpha:1.0];
+    [discoverysubstlbl2 setFont:[UIFont systemFontOfSize:14]];
+    discoverysubstlbl2.text = @"FAQ, contact, and more";
+    [v addSubview:discoverysubstlbl2];
+    
+    UIView *sperator_v2 = [[UIView alloc] initWithFrame:CGRectMake(65, 300+fPadding, self.view.frame.size.width, 1)];
+    sperator_v2.backgroundColor = [UIColor colorWithRed:77/255.0f green:77/255.0f blue:77/255.0f alpha:1.0];
+    sperator_v2.alpha = 0.2f;
+    [v addSubview:sperator_v2];
+
+    
     return v;
 }
 
+#pragma matchView
 -(UIView*)matchView{
     
     UIView *v = [UIView new];
     v.backgroundColor = [UIColor whiteColor];
     
+    // PPUser find user = 0
+    
+    if (/* DISABLES CODE */ (1))
+    {
+        [self noFriend:v];
+    }
+    else{
+        UIView *vt = [[UIView alloc] initWithFrame:CGRectMake(0, -30, self.view.frame.size.width, self.view.frame.size.height)];
+        vt.backgroundColor = [UIColor redColor];
+        
+        ChoosePersonViewController *choosePersonVC = [[ChoosePersonViewController alloc] init];
+        
+        [vt addSubview:choosePersonVC.view];
+        
+        [v addSubview:vt];
+    }
+    return v;
+}
+
+-(void)noFriend:(UIView*)v
+{
     //Creating a rounded image view.
     RoundedImageView *profileImageView = [[RoundedImageView alloc] initWithFrame:CGRectMake(self.view.center.x-40, self.view.center.y-160, 80, 80)];
     
@@ -431,36 +698,15 @@
     profileImageView.image = [UIImage imageNamed:@"profile_pic.jpg"];
     profileImageView.backgroundImage = [UIImage imageNamed:@"dp_holder_large.png"];
     
-    //Adding rounded image view to main view.
+    self.halo.haloLayerNumber = 2;
+    [self.halo setBackgroundColor:[UIColor redColor].CGColor];
+    self.halo.animationDuration = 3.5;
+    self.halo.radius = 160;
+    self.halo.position = profileImageView.center;
+    self.halo.hidden = NO;
+    
+    [v.layer insertSublayer:self.halo above:v.layer];
     [v addSubview:profileImageView];
-    
-    UIButton *purchasebtn = [[UIButton alloc] initWithFrame:CGRectMake(10, self.view.frame.size.height-154, 94, 94)];
-    
-    [purchasebtn setImage:[UIImage imageNamed:@"repost"] forState:UIControlStateNormal];
-    [purchasebtn addTarget:self action:@selector(purchasebtnpreesed:) forControlEvents:UIControlEventTouchUpInside];
-    
-    [v addSubview:purchasebtn];
-    
-    UIButton *superlikebtn = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width-10-94, self.view.frame.size.height-154, 94, 94)];
-    
-    [superlikebtn setImage:[UIImage imageNamed:@"superlike"] forState:UIControlStateNormal];
-    [superlikebtn addTarget:self action:@selector(superlikebtnpreesed:) forControlEvents:UIControlEventTouchUpInside];
-    
-    [v addSubview:superlikebtn];
-    
-    UIButton *likebtn = [[UIButton alloc] initWithFrame:CGRectMake(10+70, self.view.frame.size.height-149, 94, 94)];
-    
-    [likebtn setImage:[UIImage imageNamed:@"unlike"] forState:UIControlStateNormal];
-    [likebtn addTarget:self action:@selector(unlikebtnpreesed:) forControlEvents:UIControlEventTouchUpInside];
-    
-    [v addSubview:likebtn];
-    
-    UIButton *unlikebtn = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width-10-94-70, self.view.frame.size.height-149, 94, 94)];
-    
-    [unlikebtn setImage:[UIImage imageNamed:@"like"] forState:UIControlStateNormal];
-    [unlikebtn addTarget:self action:@selector(likebtnpreesed:) forControlEvents:UIControlEventTouchUpInside];
-    
-    [v addSubview:unlikebtn];
     
     UILabel *descriplbl = [[UILabel alloc] initWithFrame:CGRectMake(self.view.center.x - self.view.frame.size.width/2, self.view.frame.size.height-280, self.view.frame.size.width, 60)];
     descriplbl.numberOfLines = 2;
@@ -471,10 +717,9 @@
     descriplbl.text = @"There's not one new around you. \nUse Passport to choose a new location.";
     
     [v addSubview:descriplbl];
-    
-    return v;
 }
 
+#pragma MessageView
 -(UIView*)messageView{
     
     UIView *v = [UIView new];
@@ -506,25 +751,17 @@
     return v;
 }
 
+#pragma mark- scroll delegate
 
-#pragma mark - Button Actions
-- (void)purchasebtnpreesed:(UIButton *)sender {
-    
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    CGFloat pageWidth = self.scrollView.frame.size.width;
+    float fractionalPage = self.scrollView.contentOffset.x / pageWidth;
+    NSInteger page = lround(fractionalPage);
+    self.pageControl.currentPage = page;
 }
 
-- (void)superlikebtnpreesed:(UIButton *)sender
-{
-    
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
 }
-
-- (void)likebtnpreesed:(UIButton *)sender
-{
-    
-}
-
-- (void)unlikebtnpreesed:(UIButton *)sender
-{
-    
-}
-
 @end
