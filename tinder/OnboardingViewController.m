@@ -33,7 +33,13 @@
 
 #import "RoundedImageView/RoundedImageView.h"
 
-@interface OnboardingViewController () <UIScrollViewDelegate>
+#import "ChatViewController.h"
+
+#import "Person.h"
+#import "GlobalVars.h"
+#import "ActivityUserViewController.h"
+
+@interface OnboardingViewController () <UIScrollViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate>
 @property (nonatomic) UIButton *fbLogin;
 @property (nonatomic) UIScrollView *scrollView;
 @property (nonatomic) UIPageControl *pageControl;
@@ -50,9 +56,11 @@
 
 @property (nonatomic, weak) PulsingHaloLayer *halo;
 
-@property (nonatomic) UITableView *uiTable;
-
 @property (nonatomic) UIActivityIndicatorView *activityIndicator;
+
+@property (nonatomic) SLPagingViewController *pageViewController;
+
+@property (nonatomic) UIView *vt;
 
 @end
 
@@ -61,28 +69,32 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    NSLog(@"OnboardingViewController loaded");
+
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(recieveInventoryUpdate:) name:@"Jacky" object:nil];
+    
+    [self loaData];
+    [self updateAvailableChatRooms];
+    
     [self setUpBackground];
     [self addButtons];
     [self setUpScrollView];
     [self addPageControl];
-    
+
+    // init animation
     [self initialAnimation];
-    
     PulsingHaloLayer *layer = [PulsingHaloLayer layer];
-    
     self.halo = layer;
     self.halo.hidden = YES;
+    [self.view.layer insertSublayer:self.halo above:self.view.layer];
     
-    self.activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    // init activityIndicator
+    self.activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
     self.activityIndicator.center = CGPointMake(self.view.center.x, self.view.center.y);
-    
     self.activityIndicator.hidden = YES;
+    [self.view addSubview:self.activityIndicator];
     
-     [self.view.layer insertSublayer:self.halo above:self.view.layer];
-    
+    // init Location Manager
     self.manager = [CLLocationManager updateManagerWithAccuracy:50.0 locationAge:15.0 authorizationDesciption:CLLocationUpdateAuthorizationDescriptionAlways];
-    
     if ([CLLocationManager isLocationUpdatesAvailable]) {
         [self.manager startUpdatingLocationWithUpdateBlock:^(CLLocationManager *manager, CLLocation *location, NSError *error, BOOL *stopUpdating) {
             NSLog(@"Our new location: %@", location);
@@ -297,7 +309,7 @@
 
 - (void)_loginWithFacebook {
 
-    NSArray *permissionsArray = @[@"user_about_me", @"user_birthday", @"user_location"];
+    NSArray *permissionsArray = @[@"email"];
     
     [PFFacebookUtils logInWithPermissions:permissionsArray block:^(PFUser *user, NSError *error) {
         [self.activityIndicator stopAnimating];
@@ -313,7 +325,6 @@
             }
         } else {
             [self updateUserInformation];
-            [self LogIned];
         }
     }];
 }
@@ -322,7 +333,6 @@
 - (void) updateUserInformation {
     FBRequest *request = [FBRequest requestForMe];
     [request startWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
-        
         NSLog(@"result:%@", result);
         
         if (!error) {
@@ -334,35 +344,22 @@
             
             NSMutableDictionary *userProfile = [[NSMutableDictionary alloc] initWithCapacity:8];
             if (userDictionary[@"name"]) {
-                userProfile[kYIUserProfileNameKey] = userDictionary[@"name"];
+                userProfile[kTinderUserProfileNameKey] = userDictionary[@"name"];
             }
-            if (userDictionary[@"first_name"]) {
-                userProfile[kYIUserProfileFirstNameKey] = userDictionary[@"first_name"];
-            }
-            if (userDictionary[@"location"][@"name"]) {
-                userProfile[kYIUserProfileLocationKey] = userDictionary[@"location"][@"name"];
-            }
-            if (userDictionary[@"gender"]) {
-                userProfile[kYIUserProfileGenderKey] = userDictionary[@"gender"];
-            }
-            if (userDictionary[@"birthday"]) {
-                userProfile[kYIUserProfileBirthdayKey] = userDictionary[@"birthday"];
-                NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-                [formatter setDateStyle:NSDateFormatterShortStyle];
-                NSDate *date = [formatter dateFromString:userDictionary[@"birthday"]];
-                NSDate *now = [NSDate date];
-                NSTimeInterval seconds = [now timeIntervalSinceDate:date];
-                int age = seconds / 31536000;
-                userProfile[kYIUserProfileAgeKey] = @(age);  //converts age into NSNumber
-            }
-            
+
             if ([pictureURL absoluteString]) {
-                userProfile[kYIUserProfilePictureURL] = [pictureURL absoluteString];
+                userProfile[kTinderUserProfilePictureURL] = [pictureURL absoluteString];
             }
             
-            [[PFUser currentUser] setObject:userProfile forKey:kYIUserProfileKey];
+            [[NSUserDefaults standardUserDefaults] setObject:userProfile forKey:@"user_profile"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+            
+            [[PFUser currentUser] setObject:userProfile forKey:kTinderUserProfileKey];
             [[PFUser currentUser] saveInBackground];
+
             [self requestImage];
+            
+            [self LogIned];
         } else {
             NSLog(@"Error in FB request:%@", error);
         }
@@ -380,9 +377,10 @@
     PFFile *photoFile = [PFFile fileWithData:imageData];
     [photoFile saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         if (succeeded) {
-            PFObject *photo = [PFObject objectWithClassName:kYIPhotoClassKey];
-            [photo setObject:[PFUser currentUser] forKey:kYIPhotoUserKey];
-            [photo setObject:photoFile forKey:kYIPhotoPictureKey];
+            PFObject *photo = [PFObject objectWithClassName:kTinderPhotoClassKey];
+            [photo setObject:[PFUser currentUser] forKey:kTinderPhotoUserKey];
+//            [photo setObject:[PFUser currentUser].username forKey:kTinderUserProfileNameKey];
+            [photo setObject:photoFile forKey:kTinderPhotoPictureKey];
             [photo saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                 NSLog(@"Photo saved sucessfully");
             }];
@@ -391,15 +389,15 @@
 }
 
 - (void) requestImage {
-    PFQuery *query = [PFQuery queryWithClassName:kYIPhotoClassKey];
-    [query whereKey:kYIPhotoUserKey equalTo:[PFUser currentUser]]; // only get photos back from current user
+    PFQuery *query = [PFQuery queryWithClassName:kTinderPhotoClassKey];
+    [query whereKey:kTinderPhotoUserKey equalTo:[PFUser currentUser]]; // only get photos back from current user
     
     [query countObjectsInBackgroundWithBlock:^(int number, NSError *error) {
         if (number == 0) {
             PFUser *user = [PFUser currentUser];
             self.imageData = [[NSMutableData alloc] init];
             
-            NSURL *profilePictureURL = [NSURL URLWithString:user[kYIUserProfileKey][kYIUserProfilePictureURL]];
+            NSURL *profilePictureURL = [NSURL URLWithString:user[kTinderUserProfileKey][kTinderUserProfilePictureURL]];
             NSURLRequest *urlRequest = [NSURLRequest requestWithURL:profilePictureURL cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:4.0f];
             NSURLConnection *urlConnection  = [[NSURLConnection alloc] initWithRequest:urlRequest delegate:self];
             if (!urlConnection) {
@@ -436,23 +434,21 @@
     UIImage *img1 = [UIImage imageNamed:@"gear"];
     img1 = [img1 imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     
-//    UIImage *img2 = [UIImage imageNamed:@"tinder"];
-//    img2 = [img2 imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    
     UIImage *img2 = [UIImage imageNamed:@"tindericon"];
     img2 = [img2 imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     
     UIImage *img4 = [UIImage imageNamed:@"chat"];
     img4 = [img4 imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     
-    SLPagingViewController *pageViewController = [[SLPagingViewController alloc] initWithNavBarItems:@[[[UIImageView alloc] initWithImage:img1], [[UIImageView alloc] initWithImage:img2],[[UIImageView alloc] initWithImage:img4]]
+    self.pageViewController = [[SLPagingViewController alloc] initWithNavBarItems:@[[[UIImageView alloc] initWithImage:img1], [[UIImageView alloc] initWithImage:img2],[[UIImageView alloc] initWithImage:img4]]
                                                                                     navBarBackground:[UIColor whiteColor]
-                                                                                               views:@[[self settingView], [self matchView], [self messageView]]
+                                                                            views:@[[self settingView], [self matchView:FALSE], [self messageView]]
                                                                                      showPageControl:NO];
-    pageViewController.navigationSideItemsStyle = SLNavigationSideItemsStyleOnBounds;
+    self.pageViewController.navigationSideItemsStyle = SLNavigationSideItemsStyleOnBounds;
     float minX = 45.0;
     // Tinder Like
-    pageViewController.pagingViewMoving = ^(NSArray *subviews){
+    
+    self.pageViewController.pagingViewMoving = ^(NSArray *subviews){
         float mid  = [UIScreen mainScreen].bounds.size.width/2 - minX;
         float midM = [UIScreen mainScreen].bounds.size.width - minX;
         for(UIImageView *v in subviews){
@@ -479,9 +475,19 @@
         }
     };
     
+    
+    
     AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
-    appDelegate.navigationController = [[UINavigationController alloc] initWithRootViewController:pageViewController];
+    
+    appDelegate.navigationController = [[UINavigationController alloc] initWithRootViewController:self.pageViewController];
     [appDelegate.window setRootViewController:appDelegate.navigationController];
+}
+
+- (void)reloadViews{
+    [self.pageViewController reloadInputViews];
+    [self.pageViewController.view setNeedsDisplay];
+
+    [self.view setNeedsDisplay];
 }
 
 - (void)privacyButtonPressed:(UIButton *)sender
@@ -523,12 +529,6 @@
     [self presentViewController:alertVC animated:YES completion:nil];
 }
 
--(UIView*)viewWithBackground{
-    UIView *v = [UIView new];
-    v.backgroundColor = [UIColor yellowColor];
-    return v;
-}
-
 
 -(UIView*)settingView{
     UIView *v = [UIView new];
@@ -536,8 +536,6 @@
     v.backgroundColor = [UIColor whiteColor];
     
     UIImageView *userPhotoImg = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 160)];
-    // show image
-    userPhotoImg.image = [UIImage imageNamed:@"profile_pic.jpg"];
     // create effect
     UIBlurEffect *blur = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
     // add effect to an effect view
@@ -550,8 +548,22 @@
     
     //Configring the rounded imageview by setting appropriate image and offset.
     profileImageView.imageOffset = 2.5;
-    profileImageView.image = [UIImage imageNamed:@"profile_pic.jpg"];
     profileImageView.backgroundImage = [UIImage imageNamed:@"dp_holder_large.png"];
+    
+    // Get profile picture
+    PFQuery *query = [PFQuery queryWithClassName:kTinderPhotoClassKey];
+    [query whereKey:kTinderPhotoUserKey equalTo:[PFUser currentUser]];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if ([objects count] > 0) {
+            PFObject *photo = objects[0];
+            PFFile *pictureFile = photo[kTinderPhotoPictureKey];
+            [pictureFile getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
+                profileImageView.image = [UIImage imageWithData:data];
+                    userPhotoImg.image = [UIImage imageWithData:data];
+            }];
+        }
+    }];
+
     
     
     UILabel *profileNamelbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 70, self.view.frame.size.width, 100)];
@@ -560,8 +572,12 @@
     profileNamelbl.textAlignment = NSTextAlignmentCenter;
     profileNamelbl.textColor = [UIColor whiteColor];
     [profileNamelbl setFont:[UIFont boldSystemFontOfSize:16]];
+
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSMutableDictionary *user_profile = [userDefaults objectForKey:@"user_profile"];
     
-    profileNamelbl.text = @"Jacky";
+    profileNamelbl.text = [user_profile objectForKey:@"name"];
+
     
     UILabel *viewProfilelbl = [[UILabel alloc] initWithFrame:CGRectMake(0, 90, self.view.frame.size.width, 100)];
     
@@ -664,28 +680,39 @@
 }
 
 #pragma matchView
--(UIView*)matchView{
+-(UIView*)matchView:(BOOL)isKey{
     
     UIView *v = [UIView new];
     v.backgroundColor = [UIColor whiteColor];
     
-    // PPUser find user = 0
+    [self noFriend:v];
+
+    self.vt = [[UIView alloc] initWithFrame:CGRectMake(0, -30, self.view.frame.size.width, self.view.frame.size.height)];
+    self.vt.backgroundColor = [UIColor whiteColor];
+    ChoosePersonViewController *choosePersonVC = [[ChoosePersonViewController alloc] init];
     
-    if (/* DISABLES CODE */ (1))
-    {
-        [self noFriend:v];
-    }
-    else{
-        UIView *vt = [[UIView alloc] initWithFrame:CGRectMake(0, -30, self.view.frame.size.width, self.view.frame.size.height)];
-        vt.backgroundColor = [UIColor redColor];
-        
-        ChoosePersonViewController *choosePersonVC = [[ChoosePersonViewController alloc] init];
-        
-        [vt addSubview:choosePersonVC.view];
-        
-        [v addSubview:vt];
-    }
+    [self.vt addSubview:choosePersonVC.view];
+    [v addSubview:self.vt];
+    
     return v;
+}
+
+- (void)notificationCall{
+    //[[NSNotificationCenter defaultCenter] postNotificationName:@"Jacky" object:self];
+    [self.vt setHidden:YES];
+}
+
+- (void)recieveInventoryUpdate:(NSNotification *)notification {
+    NSLog(@"%@", notification.object);
+    [self matchView:TRUE];
+}
+
+-(BOOL)matchUsers
+{
+    PFQuery *queryMacthusers = [PFQuery queryWithClassName:kTinderUserClassNameKey];
+    [queryMacthusers whereKey:kTinderActivityTypeLikeKey equalTo:[PFUser currentUser]];
+    
+    return 1;
 }
 
 -(void)noFriend:(UIView*)v
@@ -695,8 +722,20 @@
     
     //Configring the rounded imageview by setting appropriate image and offset.
     profileImageView.imageOffset = 2.5;
-    profileImageView.image = [UIImage imageNamed:@"profile_pic.jpg"];
     profileImageView.backgroundImage = [UIImage imageNamed:@"dp_holder_large.png"];
+    
+    // Get profile picture
+    PFQuery *query = [PFQuery queryWithClassName:kTinderPhotoClassKey];
+    [query whereKey:kTinderPhotoUserKey equalTo:[PFUser currentUser]];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if ([objects count] > 0) {
+            PFObject *photo = objects[0];
+            PFFile *pictureFile = photo[kTinderPhotoPictureKey];
+            [pictureFile getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
+                profileImageView.image = [UIImage imageWithData:data];
+            }];
+        }
+    }];
     
     self.halo.haloLayerNumber = 2;
     [self.halo setBackgroundColor:[UIColor redColor].CGColor];
@@ -724,31 +763,59 @@
     
     UIView *v = [UIView new];
     v.backgroundColor = [UIColor whiteColor];
+
+    GlobalVars  *vars = [GlobalVars sharedInstance];
     
-    UIImageView *ImageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.center.x-100, 50, 200, 200)];
-    ImageView.image = [UIImage imageNamed:@"messageEmpty"];
-    
-    UILabel *titleLbl = [[UILabel alloc] initWithFrame:CGRectMake(self.view.center.x - self.view.frame.size.width/2, 270, self.view.frame.size.width, 50)];
-    titleLbl.numberOfLines = -1;
-    titleLbl.textAlignment = NSTextAlignmentCenter;
-    titleLbl.textColor = [UIColor colorWithRed:68.0/255.0 green:68.0/255.0 blue:68.0/255.0 alpha:1.0];
-    [titleLbl setFont:[UIFont boldSystemFontOfSize:18]];
-    
-    titleLbl.text = @"Get Swiping";
-    
-    UILabel *descripLbl = [[UILabel alloc] initWithFrame:CGRectMake(self.view.center.x - self.view.frame.size.width/2, 300, self.view.frame.size.width, 100)];
-    descripLbl.numberOfLines = 3;
-    descripLbl.textAlignment = NSTextAlignmentCenter;
-    descripLbl.textColor = [UIColor colorWithRed:68.0/255.0 green:68.0/255.0 blue:68.0/255.0 alpha:1.0];
-    [descripLbl setFont:[UIFont systemFontOfSize:14]];
-    
-    descripLbl.text = @"When you match with other users \nthey'll appear here where you can send\nthem a message";
-    
-    [v addSubview:titleLbl];
-    [v addSubview:descripLbl];
-    [v addSubview:ImageView];
+    if ([vars.availableChatrooms count] == 0) {
+            UIImageView *ImageView = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.center.x-100, 50, 200, 200)];
+            ImageView.image = [UIImage imageNamed:@"messageEmpty"];
+        
+            UILabel *titleLbl = [[UILabel alloc] initWithFrame:CGRectMake(self.view.center.x - self.view.frame.size.width/2, 270, self.view.frame.size.width, 50)];
+            titleLbl.numberOfLines = -1;
+            titleLbl.textAlignment = NSTextAlignmentCenter;
+            titleLbl.textColor = [UIColor colorWithRed:68.0/255.0 green:68.0/255.0 blue:68.0/255.0 alpha:1.0];
+            [titleLbl setFont:[UIFont boldSystemFontOfSize:18]];
+        
+            titleLbl.text = @"Get Swiping";
+        
+            UILabel *descripLbl = [[UILabel alloc] initWithFrame:CGRectMake(self.view.center.x - self.view.frame.size.width/2, 300, self.view.frame.size.width, 100)];
+            descripLbl.numberOfLines = 3;
+            descripLbl.textAlignment = NSTextAlignmentCenter;
+            descripLbl.textColor = [UIColor colorWithRed:68.0/255.0 green:68.0/255.0 blue:68.0/255.0 alpha:1.0];
+            [descripLbl setFont:[UIFont systemFontOfSize:14]];
+        
+            descripLbl.text = @"When you match with other users \nthey'll appear here where you can send\nthem a message";
+            
+            [v addSubview:titleLbl];
+            [v addSubview:descripLbl];
+            [v addSubview:ImageView];
+
+    }
+    else
+    {
+    ActivityUserViewController *activityUserVC = [[ActivityUserViewController alloc] init];
+
+    [self addChildViewController:activityUserVC];
+    [activityUserVC didMoveToParentViewController:self];
+
+    [v addSubview:activityUserVC.view];
+    }
     
     return v;
+}
+
+- (void)chatButtonPressed:(UIButton *)sender {
+    GlobalVars *vars = [GlobalVars sharedInstance];
+    
+    ChatViewController *chatVC = [[ChatViewController alloc] init] ;
+    chatVC.chatRoom = vars.availableChatrooms[0];
+
+    
+    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    
+    [appDelegate.navigationController pushViewController:chatVC animated:NO];
+    // [appDelegate.window setRootViewController:appDelegate.navigationController];
+
 }
 
 #pragma mark- scroll delegate
@@ -764,4 +831,99 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+#pragma mark- load data (like users, unlike users, match users, chat room, etc)
+- (void) loaData {
+    
+    PFQuery *query = [PFQuery queryWithClassName:kTinderPhotoClassKey];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        for (int iPhoto = 0; iPhoto < [objects count]; iPhoto++) {
+            Person *person = [Person new];
+            
+            PFObject *photo = objects[iPhoto];            
+            PFObject *photoUser = photo[kTinderPhotoUserKey];            
+            PFFile *pictureFile = photo[kTinderPhotoPictureKey];
+            
+            PFQuery *queryUser = [PFUser query];
+            [queryUser whereKey:kTinderUserProfileObjectIdKey equalTo:photoUser.objectId];
+            [queryUser findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
+             {
+                 if (error == nil)
+                 {
+                     if ([objects count] != 0)
+                     {
+                         PFUser *user = [objects firstObject];
+                         NSDictionary *userProfile = user[kTinderUserProfileKey];
+                         person.name = [userProfile objectForKey:@"name"];
+                         person.objectId = user.objectId;                         
+                     }
+                 }
+                 else NSLog(@"Network error.");
+             }];
+            
+            [pictureFile getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
+                person.image = [UIImage imageWithData:data];
+                
+                GlobalVars *gVars = [GlobalVars sharedInstance];
+                [gVars.default_people addObject:person];
+                NSLog(@"persons Loaded %@", gVars.default_people);
+            }];
+        }
+    }];
+}
+
+- (void) loadLikeUsers{
+    
+    PFQuery *query = [PFUser query];
+    [query whereKey:kTinderUserProfileLikeusersKey equalTo:[PFUser currentUser]];
+    [query findObjectsInBackgroundWithBlock:^(NSArray * _Nullable objects, NSError * _Nullable error) {
+        if (error == nil) {
+            if ([objects count] > 0) {
+                PFUser *user = [objects firstObject];
+                NSMutableArray *likeUserArry = [[NSMutableArray alloc] init];
+                likeUserArry = [user[kTinderUserProfileLikeusersKey] mutableCopy];
+            }
+        }
+    }];
+}
+
+- (void) loadUnLikeUsers{
+    
+    PFQuery *query = [PFUser query];
+    [query whereKey:kTinderUserProfileUnLikeusersKey equalTo:[PFUser currentUser]];
+    [query findObjectsInBackgroundWithBlock:^(NSArray * _Nullable objects, NSError * _Nullable error) {
+        if (error == nil) {
+            if ([objects count] > 0) {
+                PFUser *user = [objects firstObject];
+                NSMutableArray *UnlikeUserArry = [[NSMutableArray alloc] init];
+                UnlikeUserArry = [user[kTinderUserProfileUnLikeusersKey] mutableCopy];
+            }
+        }
+    }];
+}
+
+- (void) updateAvailableChatRooms {
+    PFQuery *query = [PFQuery queryWithClassName:@"ChatRoom"];
+    [query whereKey:@"user1" equalTo:[PFUser currentUser]];
+    
+    PFQuery *queryInverse = [PFQuery queryWithClassName:@"ChatRoom"];
+    [queryInverse whereKey:@"user2" equalTo:[PFUser currentUser]];
+    
+    PFQuery *queryCombined = [PFQuery orQueryWithSubqueries:@[query, queryInverse]];
+    [queryCombined includeKey:@"chat"];  //get back the complete Chat class, not just the pointer
+    [queryCombined includeKey:@"user1"];
+    [queryCombined includeKey:@"user2"];
+    
+    [queryCombined findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if (!error) {
+            
+            GlobalVars *gVars = [GlobalVars sharedInstance];
+            [gVars.availableChatrooms removeAllObjects];
+            gVars.availableChatrooms = [objects mutableCopy];
+        } else {
+            NSLog(@"%@", error);
+        }
+    }];
+}
+
 @end

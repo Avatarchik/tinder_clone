@@ -1,9 +1,9 @@
 //
-//  YIConstants.h
+//  TinderConstants.h
 //  MatchMe
 //
-//  Created by Yi Wang on 8/25/14.
-//  Copyright (c) 2014 Yi. All rights reserved.
+//  Created by Tinder Wang on 8/25/14.
+//  Copyright (c) 2014 Tinder. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -12,55 +12,59 @@
 
 #pragma mark - User Class
 
-extern NSString *const kYIUserTagLineKey;
+extern NSString *const kTinderUserTagLineKey;
 
-extern NSString *const kYIUserProfileKey;
-extern NSString *const kYIUserProfileNameKey;
-extern NSString *const kYIUserProfileFirstNameKey;
-extern NSString *const kYIUserProfileLocationKey;
-extern NSString *const kYIUserProfileGenderKey;
-extern NSString *const kYIUserProfileBirthdayKey;
-extern NSString *const kYIUserProfileInterestedInKey;
-extern NSString *const kYIUserProfilePictureURL;
-extern NSString *const kYIUserProfileRelationshipStatusKey;
-extern NSString *const kYIUserProfileAgeKey;
+extern NSString *const kTinderUserClassNameKey;
+extern NSString *const kTinderUserProfileKey;
+extern NSString *const kTinderUserProfileNameKey;
+extern NSString *const kTinderUserProfileFirstNameKey;
+extern NSString *const kTinderUserProfileLocationKey;
+extern NSString *const kTinderUserProfileGenderKey;
+extern NSString *const kTinderUserProfileBirthdayKey;
+extern NSString *const kTinderUserProfileInterestedInKey;
+extern NSString *const kTinderUserProfilePictureURL;
+extern NSString *const kTinderUserProfileRelationshipStatusKey;
+extern NSString *const kTinderUserProfileAgeKey;
+extern NSString *const kTinderUserProfileObjectIdKey;
+extern NSString *const kTinderUserProfileLikeusersKey;
+extern NSString *const kTinderUserProfileUnLikeusersKey;
 
 
 #pragma mark - Photo Class
-extern NSString *const kYIPhotoClassKey;
-extern NSString *const kYIPhotoUserKey;
-extern NSString *const kYIPhotoPictureKey;
+extern NSString *const kTinderPhotoClassKey;
+extern NSString *const kTinderPhotoUserKey;
+extern NSString *const kTinderPhotoPictureKey;
 
 
 #pragma mark - Activity Class
-extern NSString *const kYIActivityClassKey;
-extern NSString *const kYIActivityTypeKey;
-extern NSString *const kYIActivityFromUserKey;
-extern NSString *const kYIActivityToUserKey;
-extern NSString *const kYIActivityPhotoKey;
-extern NSString *const kYIActivityTypeLikeKey;
-extern NSString *const kYIActivityTypeDislikeKey;
+extern NSString *const kTinderActivityClassKey;
+extern NSString *const kTinderActivityTypeKey;
+extern NSString *const kTinderActivityFromUserKey;
+extern NSString *const kTinderActivityToUserKey;
+extern NSString *const kTinderActivityPhotoKey;
+extern NSString *const kTinderActivityTypeLikeKey;
+extern NSString *const kTinderActivityTypeDislikeKey;
 
 
 #pragma mark - Settings
-extern NSString *const kYIMenEnabledKey;
-extern NSString *const kYIWomenEnabledKey;
-extern NSString *const kYISingleEnabledKey;
-extern NSString *const kYIAgeMaxKey;
+extern NSString *const kTinderMenEnabledKey;
+extern NSString *const kTinderWomenEnabledKey;
+extern NSString *const kTinderSingleEnabledKey;
+extern NSString *const kTinderAgeMaxKey;
 
 
 #pragma mark - ChatRoom
-extern NSString *const kYIChatRoomClassKey;
-extern NSString *const kYIChatRoomUser1Key;
-extern NSString *const kYIChatRoomUser2Key;
+extern NSString *const kTinderChatRoomClassKey;
+extern NSString *const kTinderChatRoomUser1Key;
+extern NSString *const kTinderChatRoomUser2Key;
 
 
 #pragma mark - Chat
-extern NSString *const kYIChatClassKey;
-extern NSString *const kYIChatChatRoomKey;
-extern NSString *const kYIChatFromUserKey;
-extern NSString *const kYIChatToUserKey;
-extern NSString *const kYIChatTextKey;
+extern NSString *const kTinderChatClassKey;
+extern NSString *const kTinderChatChatRoomKey;
+extern NSString *const kTinderChatFromUserKey;
+extern NSString *const kTinderChatToUserKey;
+extern NSString *const kTinderChatTextKey;
 
 
 

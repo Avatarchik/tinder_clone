@@ -15,6 +15,11 @@
 		1F64339E1C6E3F29009D4D13 /* PTSerif.ttc in Resources */ = {isa = PBXBuildFile; fileRef = 1F64339D1C6E3F29009D4D13 /* PTSerif.ttc */; };
 		1F6433A41C6EFEA9009D4D13 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1F6433A31C6EFEA9009D4D13 /* MainViewController.m */; };
 		1F6433A71C6F0278009D4D13 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1F6433A51C6F0278009D4D13 /* Main.storyboard */; };
+		1F8A6B331C8DFCB800D074C5 /* GlobalVars.m in Sources */ = {isa = PBXBuildFile; fileRef = 1F8A6B321C8DFCB800D074C5 /* GlobalVars.m */; };
+		1F8A6B391C8EA7CE00D074C5 /* ActivityUserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1F8A6B381C8EA7CE00D074C5 /* ActivityUserViewController.m */; };
+		1F8A6B4A1C8EB1EF00D074C5 /* CircleGreen.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F8A6B3B1C8EB1EF00D074C5 /* CircleGreen.png */; };
+		1F8A6B4B1C8EB1EF00D074C5 /* CircleGreen@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F8A6B3C1C8EB1EF00D074C5 /* CircleGreen@2x.png */; };
+		1F8A6B4C1C8EB1EF00D074C5 /* CircleGreen@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1F8A6B3D1C8EB1EF00D074C5 /* CircleGreen@3x.png */; };
 		1F8B6AD61C7D466000A9AC11 /* 列表图片@2x.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 1F8B6AD51C7D466000A9AC11 /* 列表图片@2x.jpg */; };
 		1F8C91B41C772FD500DD06E7 /* RoundedImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1F8C91B31C772FD500DD06E7 /* RoundedImageView.m */; };
 		1F8C91BA1C7730C800DD06E7 /* UIColor+SLAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = 1F8C91B71C7730C800DD06E7 /* UIColor+SLAddition.m */; };
@@ -53,6 +58,13 @@
 		1F6433A21C6EFEA9009D4D13 /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
 		1F6433A31C6EFEA9009D4D13 /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
 		1F6433A61C6F0278009D4D13 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		1F8A6B311C8DFC5F00D074C5 /* GlobalVars.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GlobalVars.h; sourceTree = "<group>"; };
+		1F8A6B321C8DFCB800D074C5 /* GlobalVars.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GlobalVars.m; sourceTree = "<group>"; };
+		1F8A6B371C8EA7CE00D074C5 /* ActivityUserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActivityUserViewController.h; sourceTree = "<group>"; };
+		1F8A6B381C8EA7CE00D074C5 /* ActivityUserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActivityUserViewController.m; sourceTree = "<group>"; };
+		1F8A6B3B1C8EB1EF00D074C5 /* CircleGreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CircleGreen.png; sourceTree = "<group>"; };
+		1F8A6B3C1C8EB1EF00D074C5 /* CircleGreen@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "CircleGreen@2x.png"; sourceTree = "<group>"; };
+		1F8A6B3D1C8EB1EF00D074C5 /* CircleGreen@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "CircleGreen@3x.png"; sourceTree = "<group>"; };
 		1F8B6AD51C7D466000A9AC11 /* 列表图片@2x.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "列表图片@2x.jpg"; sourceTree = "<group>"; };
 		1F8C91B21C772FD500DD06E7 /* RoundedImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoundedImageView.h; sourceTree = "<group>"; };
 		1F8C91B31C772FD500DD06E7 /* RoundedImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoundedImageView.m; sourceTree = "<group>"; };
@@ -142,6 +154,8 @@
 				1F1056071C6B775700961B16 /* LaunchScreen.storyboard */,
 				1F10560A1C6B775700961B16 /* Info.plist */,
 				1F1055F91C6B775700961B16 /* Supporting Files */,
+				1F8A6B311C8DFC5F00D074C5 /* GlobalVars.h */,
+				1F8A6B321C8DFCB800D074C5 /* GlobalVars.m */,
 			);
 			path = tinder;
 			sourceTree = "<group>";
@@ -184,6 +198,7 @@
 		1F6433A01C6EFE4C009D4D13 /* Menu View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				1F8A6B361C8EA77200D074C5 /* Activity User VC */,
 				1F8F3DCA1C7F45E5005950DB /* Chat VC */,
 				1F8B6ACE1C7D3EF800A9AC11 /* Setting VC */,
 				1F6433A11C6EFE63009D4D13 /* Main VC */,
@@ -201,6 +216,25 @@
 				1F6433A31C6EFEA9009D4D13 /* MainViewController.m */,
 			);
 			name = "Main VC";
+			sourceTree = "<group>";
+		};
+		1F8A6B361C8EA77200D074C5 /* Activity User VC */ = {
+			isa = PBXGroup;
+			children = (
+				1F8A6B371C8EA7CE00D074C5 /* ActivityUserViewController.h */,
+				1F8A6B381C8EA7CE00D074C5 /* ActivityUserViewController.m */,
+			);
+			name = "Activity User VC";
+			sourceTree = "<group>";
+		};
+		1F8A6B3A1C8EB1DD00D074C5 /* FindUserImages */ = {
+			isa = PBXGroup;
+			children = (
+				1F8A6B3B1C8EB1EF00D074C5 /* CircleGreen.png */,
+				1F8A6B3C1C8EB1EF00D074C5 /* CircleGreen@2x.png */,
+				1F8A6B3D1C8EB1EF00D074C5 /* CircleGreen@3x.png */,
+			);
+			name = FindUserImages;
 			sourceTree = "<group>";
 		};
 		1F8B6ACE1C7D3EF800A9AC11 /* Setting VC */ = {
@@ -233,6 +267,7 @@
 		1F8C91BC1C773B9B00DD06E7 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				1F8A6B3A1C8EB1DD00D074C5 /* FindUserImages */,
 				1F8B6AD51C7D466000A9AC11 /* 列表图片@2x.jpg */,
 				1F8C91BD1C773B9B00DD06E7 /* dp_holder_large.png */,
 				1F8C91BE1C773B9B00DD06E7 /* dp_holder_large@2x.png */,
@@ -385,6 +420,9 @@
 				1F8C91C01C773B9B00DD06E7 /* dp_holder_large.png in Resources */,
 				1F1056091C6B775700961B16 /* LaunchScreen.storyboard in Resources */,
 				1F8C91C11C773B9B00DD06E7 /* dp_holder_large@2x.png in Resources */,
+				1F8A6B4B1C8EB1EF00D074C5 /* CircleGreen@2x.png in Resources */,
+				1F8A6B4C1C8EB1EF00D074C5 /* CircleGreen@3x.png in Resources */,
+				1F8A6B4A1C8EB1EF00D074C5 /* CircleGreen.png in Resources */,
 				1F8C91C21C773B9B00DD06E7 /* profile_pic.jpg in Resources */,
 				1F64339E1C6E3F29009D4D13 /* PTSerif.ttc in Resources */,
 				1F1056061C6B775700961B16 /* Assets.xcassets in Resources */,
@@ -459,10 +497,12 @@
 				1FF39CCE1C6E06EE00268455 /* OnboardingViewController.m in Sources */,
 				1F6433991C6E23C9009D4D13 /* UIView+Extensions.m in Sources */,
 				1FA661F71C7D4D9400411D96 /* ChoosePersonView.m in Sources */,
+				1F8A6B391C8EA7CE00D074C5 /* ActivityUserViewController.m in Sources */,
 				1F1055FB1C6B775700961B16 /* main.m in Sources */,
 				1F8C91BB1C7730C800DD06E7 /* UIScrollView+UpdateContentSize.m in Sources */,
 				1F8F3DCD1C7F587F005950DB /* ChatViewController.m in Sources */,
 				1FA662061C7D506400411D96 /* ChoosePersonViewController.m in Sources */,
+				1F8A6B331C8DFCB800D074C5 /* GlobalVars.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

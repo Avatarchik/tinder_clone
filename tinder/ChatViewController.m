@@ -46,26 +46,24 @@
     [super viewDidLoad];
     
     
-    
     [[JSBubbleView appearance] setFont:[UIFont systemFontOfSize:16.0f]];
     self.messageInputView.textView.placeHolder = @"Humble brag about something!";
     [self setBackgroundColor:[UIColor whiteColor]];
     
     self.currentUser = [PFUser currentUser];
-    PFUser *testUser1 = self.chatRoom[kYIChatRoomUser1Key];
+    PFUser *testUser1 = self.chatRoom[kTinderChatRoomUser1Key];
     if ([testUser1.objectId isEqual:self.currentUser.objectId]) {
-        self.withUser = self.chatRoom[kYIChatRoomUser2Key];
+        self.withUser = self.chatRoom[kTinderChatRoomUser2Key];
     } else {
-        self.withUser = self.chatRoom[kYIChatRoomUser1Key];
+        self.withUser = self.chatRoom[kTinderChatRoomUser1Key];
     }
     
-    self.title = self.withUser[kYIUserProfileKey][kYIUserProfileFirstNameKey];
+    self.title = self.withUser[kTinderUserProfileKey][kTinderUserProfileFirstNameKey];
+    
     self.initialLoadComplete = NO;
     
     [self checkForNewChats];
     self.chatsTimer = [NSTimer scheduledTimerWithTimeInterval:15 target:self selector:@selector(checkForNewChats) userInfo:nil repeats:YES];
-    
-    
     
 }
 
@@ -100,11 +98,11 @@
 -(void)didSendText:(NSString *)text fromSender:(NSString *)sender onDate:(NSDate *)date
 {
     if (text.length != 0) {
-        PFObject *chat = [PFObject objectWithClassName:kYIChatClassKey];
-        [chat setObject:self.chatRoom forKey:kYIChatChatRoomKey];
-        [chat setObject:self.currentUser forKey:kYIChatFromUserKey];
-        [chat setObject:self.withUser forKey:kYIChatToUserKey];
-        [chat setObject:text forKey:kYIChatTextKey];
+        PFObject *chat = [PFObject objectWithClassName:kTinderChatClassKey];
+        [chat setObject:self.chatRoom forKey:kTinderChatChatRoomKey];
+        [chat setObject:self.currentUser forKey:kTinderChatFromUserKey];
+        [chat setObject:self.withUser forKey:kTinderChatToUserKey];
+        [chat setObject:text forKey:kTinderChatTextKey];
         [chat saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
             [self.chats addObject:chat];
             [JSMessageSoundEffect playMessageSentSound];
@@ -118,7 +116,7 @@
 // Determine which type of message bubble is displayed based on whether we sent or recieved the message.
 -(JSBubbleMessageType)messageTypeForRowAtIndexPath:(NSIndexPath *)indexPath {
     PFObject *chat = self.chats[indexPath.row];
-    PFUser *testFromUser = chat[kYIChatFromUserKey];
+    PFUser *testFromUser = chat[kTinderChatFromUserKey];
     if ([testFromUser.objectId isEqual:self.currentUser.objectId]) {
         return JSBubbleMessageTypeOutgoing;
     } else {
@@ -129,7 +127,7 @@
 // set color of text buble
 -(UIImageView *)bubbleImageViewWithType:(JSBubbleMessageType)type forRowAtIndexPath:(NSIndexPath *)indexPath {
     PFObject *chat = self.chats[indexPath.row];
-    PFUser *testFromUser = chat[kYIChatFromUserKey];
+    PFUser *testFromUser = chat[kTinderChatFromUserKey];
     if ([testFromUser.objectId isEqual:self.currentUser.objectId]) {
         return [JSBubbleImageViewFactory bubbleImageViewForType:type color:[UIColor js_bubbleBlueColor]];
     } else {
@@ -167,7 +165,7 @@
     
     PFObject *chat = self.chats[indexPath.row];
     JSMessage *message = [[JSMessage alloc] init];
-    message.text = chat[kYIChatTextKey];
+    message.text = chat[kTinderChatTextKey];
     
     return message;
 }
@@ -181,8 +179,8 @@
 - (void)checkForNewChats {
     int oldChatCount = (int)[self.chats count];
     
-    PFQuery *queryForChats = [PFQuery queryWithClassName:kYIChatClassKey];
-    [queryForChats whereKey:kYIChatChatRoomKey equalTo:self.chatRoom];
+    PFQuery *queryForChats = [PFQuery queryWithClassName:kTinderChatClassKey];
+    [queryForChats whereKey:kTinderChatChatRoomKey equalTo:self.chatRoom];
     [queryForChats orderByAscending:@"createdAt"];
     [queryForChats findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if (!error) {

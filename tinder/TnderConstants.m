@@ -1,9 +1,9 @@
 //
-//  YIConstants.m
+//  TinderConstants.m
 //  MatchMe
 //
-//  Created by Yi Wang on 8/25/14.
-//  Copyright (c) 2014 Yi. All rights reserved.
+//  Created by Tinder Wang on 8/25/14.
+//  Copyright (c) 2014 Tinder. All rights reserved.
 //
 
 #import "TinderConstants.h"
@@ -12,55 +12,58 @@
 
 #pragma mark - User Class
 
-NSString *const kYIUserTagLineKey                       = @"tagLine";
+NSString *const kTinderUserTagLineKey                       = @"tagLine";
 
-NSString *const kYIUserProfileKey                       = @"profile";
-NSString *const kYIUserProfileNameKey                   = @"name";
-NSString *const kYIUserProfileFirstNameKey              = @"first_name";
-NSString *const kYIUserProfileLocationKey               = @"location";
-NSString *const kYIUserProfileGenderKey                 = @"gender";
-NSString *const kYIUserProfileBirthdayKey               = @"birthday";
-NSString *const kYIUserProfileInterestedInKey           = @"interested_in";
-NSString *const kYIUserProfilePictureURL                = @"pictureURL";
-NSString *const kYIUserProfileRelationshipStatusKey     = @"relationshipStatus";
-NSString *const kYIUserProfileAgeKey                    = @"age";
-
+NSString *const kTinderUserClassNameKey                     = @"User";
+NSString *const kTinderUserProfileKey                       = @"profile";
+NSString *const kTinderUserProfileNameKey                   = @"name";
+NSString *const kTinderUserProfileFirstNameKey              = @"first_name";
+NSString *const kTinderUserProfileLocationKey               = @"location";
+NSString *const kTinderUserProfileGenderKey                 = @"gender";
+NSString *const kTinderUserProfileBirthdayKey               = @"birthday";
+NSString *const kTinderUserProfileInterestedInKey           = @"interested_in";
+NSString *const kTinderUserProfilePictureURL                = @"pictureURL";
+NSString *const kTinderUserProfileRelationshipStatusKey     = @"relationshipStatus";
+NSString *const kTinderUserProfileAgeKey                    = @"age";
+NSString *const kTinderUserProfileObjectIdKey               = @"objectId";
+NSString *const kTinderUserProfileLikeusersKey              = @"likeusers";
+NSString *const kTinderUserProfileUnLikeusersKey            = @"unlikeusers";
 
 #pragma mark - Photo Class
-NSString *const kYIPhotoClassKey                        = @"Photo";
-NSString *const kYIPhotoUserKey                         = @"user";
-NSString *const kYIPhotoPictureKey                      = @"image";
+NSString *const kTinderPhotoClassKey                        = @"Photo";
+NSString *const kTinderPhotoUserKey                         = @"user";
+NSString *const kTinderPhotoPictureKey                      = @"image";
 
 
 #pragma mark - Activity Class
-NSString *const kYIActivityClassKey                     = @"Activity";
-NSString *const kYIActivityTypeKey                      = @"type";
-NSString *const kYIActivityFromUserKey                  = @"fromUser";
-NSString *const kYIActivityToUserKey                    = @"toUser";
-NSString *const kYIActivityPhotoKey                     = @"photo";
-NSString *const kYIActivityTypeLikeKey                  = @"like";
-NSString *const kYIActivityTypeDislikeKey               = @"dislike";
+NSString *const kTinderActivityClassKey                     = @"Activity";
+NSString *const kTinderActivityTypeKey                      = @"type";
+NSString *const kTinderActivityFromUserKey                  = @"fromUser";
+NSString *const kTinderActivityToUserKey                    = @"toUser";
+NSString *const kTinderActivityPhotoKey                     = @"photo";
+NSString *const kTinderActivityTypeLikeKey                  = @"like";
+NSString *const kTinderActivityTypeDislikeKey               = @"dislike";
 
 
 #pragma mark - Settings
-NSString *const kYIMenEnabledKey                        = @"men";
-NSString *const kYIWomenEnabledKey                      = @"women";
-NSString *const kYISingleEnabledKey                     = @"single";
-NSString *const kYIAgeMaxKey                            = @"ageMax";
+NSString *const kTinderMenEnabledKey                        = @"men";
+NSString *const kTinderWomenEnabledKey                      = @"women";
+NSString *const kTinderSingleEnabledKey                     = @"single";
+NSString *const kTinderAgeMaxKey                            = @"ageMax";
 
 
 #pragma mark - ChatRoom
-NSString *const kYIChatRoomClassKey                     = @"ChatRoom";
-NSString *const kYIChatRoomUser1Key                     = @"user1";
-NSString *const kYIChatRoomUser2Key                     = @"user2";
+NSString *const kTinderChatRoomClassKey                     = @"ChatRoom";
+NSString *const kTinderChatRoomUser1Key                     = @"user1";
+NSString *const kTinderChatRoomUser2Key                     = @"user2";
 
 
 #pragma mark - Chat
-NSString *const kYIChatClassKey                         = @"Chat";
-NSString *const kYIChatChatRoomKey                      = @"chatRoom";
-NSString *const kYIChatFromUserKey                      = @"fromUser";
-NSString *const kYIChatToUserKey                        = @"toUser";
-NSString *const kYIChatTextKey                          = @"text";
+NSString *const kTinderChatClassKey                         = @"Chat";
+NSString *const kTinderChatChatRoomKey                      = @"chatRoom";
+NSString *const kTinderChatFromUserKey                      = @"fromUser";
+NSString *const kTinderChatToUserKey                        = @"toUser";
+NSString *const kTinderChatTextKey                          = @"text";
 
 
 @end

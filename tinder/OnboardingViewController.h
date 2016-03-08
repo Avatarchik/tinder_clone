@@ -10,7 +10,7 @@
 #import "AppDelegate.h"
 
 @interface OnboardingViewController : UIViewController <NSURLConnectionDataDelegate>
-
--(void)LogIned;
-
+-(void)reloadViews;
+-(UIView*)matchView:(BOOL)isKey;
+- (void)notificationCall;
 @end

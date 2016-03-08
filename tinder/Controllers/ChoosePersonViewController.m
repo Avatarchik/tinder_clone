@@ -25,12 +25,26 @@
 #import "ChoosePersonViewController.h"
 #import "Person.h"
 #import <MDCSwipeToChoose/MDCSwipeToChoose.h>
+#import "OnboardingViewController.h"
+
+#import <Parse/Parse.h>
+#import "TinderConstants.h"
+#import "GlobalVars.h"
 
 static const CGFloat ChoosePersonButtonHorizontalPadding = 80.f;
 static const CGFloat ChoosePersonButtonVerticalPadding = 30.f;
 
 @interface ChoosePersonViewController ()
 @property (nonatomic, strong) NSMutableArray *people;
+@property (nonatomic, strong) UIImage* peopleImg;
+
+@property (strong, nonatomic) NSArray *photos;  // store all photos we get back from Parse
+@property (strong, nonatomic) PFObject *photo;  // current photo on screen
+@property (strong, nonatomic) NSMutableArray *activities; // keep track of activities
+
+@property (nonatomic) int currentPhotoIndex;    // keep track of current photo in the photos array
+@property (nonatomic) BOOL isLikedByCurrentUser;
+@property (nonatomic) BOOL isDislikedByCurrentUser;
 @end
 
 @implementation ChoosePersonViewController
@@ -42,7 +56,10 @@ static const CGFloat ChoosePersonButtonVerticalPadding = 30.f;
     if (self) {
         // This view controller maintains a list of ChoosePersonView
         // instances to display.
-        _people = [[self defaultPeople] mutableCopy];
+        GlobalVars *gVars = [GlobalVars sharedInstance];
+        _people = [gVars.default_people mutableCopy];
+        
+        // _people = [[self defaultPeople] mutableCopy];
     }
     return self;
 }
@@ -51,7 +68,9 @@ static const CGFloat ChoosePersonButtonVerticalPadding = 30.f;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
+    
+    NSLog(@"CHoosePersonViewController Loaded");
+    
     // Display the first ChoosePersonView in front. Users can swipe to indicate
     // whether they like or dislike the person displayed.
     self.frontCardView = [self popPersonViewWithFrame:[self frontCardViewFrame]];
@@ -67,6 +86,26 @@ static const CGFloat ChoosePersonButtonVerticalPadding = 30.f;
     // See the `nopeFrontCardView` and `likeFrontCardView` methods.
     [self constructNopeButton];
     [self constructLikedButton];
+    
+    self.currentPhotoIndex = 0;
+    
+    PFQuery *query = [PFQuery queryWithClassName:kTinderPhotoClassKey];
+    [query whereKey:kTinderPhotoUserKey notEqualTo:[PFUser currentUser]];
+    [query includeKey:kTinderPhotoUserKey];  // include the actual User object when we retrieve a photo
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if (!error) {
+            self.photos = objects;
+                [self queryForCurrentPhotoIndex];
+//            if ([self allowPhoto] == NO) {
+//                [self setupNextPhoto];
+//            } else {
+//                [self queryForCurrentPhotoIndex];
+//            }
+        } else {
+            NSLog(@"Error:%@", error);
+        }
+    }];
+
 }
 
 - (NSUInteger)supportedInterfaceOrientations {
@@ -85,9 +124,19 @@ static const CGFloat ChoosePersonButtonVerticalPadding = 30.f;
     // MDCSwipeToChooseView shows "NOPE" on swipes to the left,
     // and "LIKED" on swipes to the right.
     if (direction == MDCSwipeDirectionLeft) {
-        NSLog(@"You noped %@.", self.currentPerson.name);
+        if (self.currentPhotoIndex + 1 < [self.photos count]) {
+            self.currentPhotoIndex++;
+            [self queryForCurrentPhotoIndex];
+            
+            [self saveDislike];
+        }
     } else {
-        NSLog(@"You liked %@.", self.currentPerson.name);
+        if (self.currentPhotoIndex + 1 < [self.photos count]) {
+            self.currentPhotoIndex++;
+            [self queryForCurrentPhotoIndex];
+            
+            [self saveLike];
+        }
     }
 
     // MDCSwipeToChooseView removes the view from the view hierarchy
@@ -117,40 +166,13 @@ static const CGFloat ChoosePersonButtonVerticalPadding = 30.f;
     self.currentPerson = frontCardView.person;
 }
 
-- (NSArray *)defaultPeople {
-    // It would be trivial to download these from a web service
-    // as needed, but for the purposes of this sample app we'll
-    // simply store them in memory.
-    return @[
-        [[Person alloc] initWithName:@"Bill Gates"
-                               image:[UIImage imageNamed:@"person1"]
-                                 age:15
-               numberOfSharedFriends:3
-             numberOfSharedInterests:2
-                      numberOfPhotos:1],
-        [[Person alloc] initWithName:@"Jacky"
-                               image:[UIImage imageNamed:@"person2"]
-                                 age:28
-               numberOfSharedFriends:2
-             numberOfSharedInterests:6
-                      numberOfPhotos:8],
-        [[Person alloc] initWithName:@"Jin"
-                               image:[UIImage imageNamed:@"person3"]
-                                 age:14
-               numberOfSharedFriends:1
-             numberOfSharedInterests:3
-                      numberOfPhotos:5],
-        [[Person alloc] initWithName:@"GJ"
-                               image:[UIImage imageNamed:@"person4"]
-                                 age:18
-               numberOfSharedFriends:1
-             numberOfSharedInterests:1
-                      numberOfPhotos:2],
-    ];
-}
-
 - (ChoosePersonView *)popPersonViewWithFrame:(CGRect)frame {
+    
     if ([self.people count] == 0) {
+        if (self.frontCardView == nil) {
+            [self.view setHidden:YES];
+            [self.view.superview setHidden:YES];
+        }
         return nil;
     }
 
@@ -232,12 +254,156 @@ static const CGFloat ChoosePersonButtonVerticalPadding = 30.f;
 
 // Programmatically "nopes" the front card view.
 - (void)nopeFrontCardView {
+    if (self.currentPhotoIndex + 1 < [self.photos count]) {
+        self.currentPhotoIndex++;
+        [self queryForCurrentPhotoIndex];
+        
+        [self saveDislike];
+    }
+
     [self.frontCardView mdc_swipe:MDCSwipeDirectionLeft];
 }
 
 // Programmatically "likes" the front card view.
 - (void)likeFrontCardView {
+    if (self.currentPhotoIndex + 1 < [self.photos count]) {
+        self.currentPhotoIndex++;
+        [self queryForCurrentPhotoIndex];
+        
+        [self saveDislike];
+    }
+
     [self.frontCardView mdc_swipe:MDCSwipeDirectionRight];
+}
+
+
+- (void)saveLike {
+    PFObject *likeActivity = [PFObject objectWithClassName:kTinderActivityClassKey];
+    [likeActivity setObject:kTinderActivityTypeLikeKey forKey:kTinderActivityTypeKey];
+    [likeActivity setObject:[PFUser currentUser] forKey:kTinderActivityFromUserKey];
+    [likeActivity setObject:self.photo[kTinderPhotoUserKey] forKey:kTinderActivityToUserKey];
+    [likeActivity setObject:self.photo forKey:kTinderActivityPhotoKey];
+    [likeActivity saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        self.isLikedByCurrentUser = YES;
+        self.isDislikedByCurrentUser = NO;
+        [self.activities addObject:likeActivity];
+        [self checkForPhotoUserLikes];  // possibly create chatroom if there is mutual like
+      //   [self setupNextPhoto];
+    }];
+}
+
+- (void)checkForPhotoUserLikes {
+    PFQuery *query = [PFQuery queryWithClassName:kTinderActivityClassKey];
+    // this user we are viewing as in fact liked me
+    [query whereKey:kTinderActivityFromUserKey equalTo:self.photo[kTinderPhotoUserKey]];
+    [query whereKey:kTinderActivityToUserKey equalTo:[PFUser currentUser]];
+    [query whereKey:kTinderActivityTypeKey equalTo:kTinderActivityTypeLikeKey];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if ([objects count] > 0) {
+            // create our chat room
+            [self createChatRoom];
+        }
+    }];
+}
+
+- (void)createChatRoom {
+    
+    // current user could be user 1 or user 2 so we have to check both scenarios
+    PFQuery *queryForChatRoom = [PFQuery queryWithClassName:kTinderChatRoomClassKey];
+    [queryForChatRoom whereKey:kTinderChatRoomUser1Key equalTo:[PFUser currentUser]];
+    [queryForChatRoom whereKey:kTinderChatRoomUser2Key equalTo:self.photo[kTinderPhotoUserKey]];
+    
+    PFQuery *queryForChatRoomInverse = [PFQuery queryWithClassName:kTinderChatRoomClassKey];
+    [queryForChatRoomInverse whereKey:kTinderChatRoomUser1Key equalTo:self.photo[kTinderPhotoUserKey]];
+    [queryForChatRoomInverse whereKey:kTinderChatRoomUser2Key equalTo:[PFUser currentUser]];
+    
+    // combine the 2 queries
+    PFQuery *combinedQuery = [PFQuery orQueryWithSubqueries:@[queryForChatRoom, queryForChatRoomInverse]];
+    [combinedQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if ([objects count] == 0) {
+            // there is no existing chatroom, so start a new one
+            PFObject *chatRoom = [ PFObject objectWithClassName:kTinderChatRoomClassKey];
+            [chatRoom setObject:[PFUser currentUser] forKey:kTinderChatRoomUser1Key];
+            [chatRoom setObject:self.photo[kTinderPhotoUserKey] forKey:kTinderChatRoomUser2Key];
+            [chatRoom saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+               //  [self performSegueWithIdentifier:@"homeToMatchSegue" sender:nil];
+                
+                NSLog(@"Match Successed!");
+            }];
+            
+        }
+    }];
+}
+
+- (void)saveDislike {
+    PFObject *dislikeActivity = [PFObject objectWithClassName:kTinderActivityClassKey];
+    [dislikeActivity setObject:kTinderActivityTypeDislikeKey forKey:kTinderActivityTypeKey];
+    [dislikeActivity setObject:[PFUser currentUser] forKey:kTinderActivityFromUserKey];
+    [dislikeActivity setObject:self.photo[kTinderPhotoUserKey] forKey:kTinderActivityToUserKey];
+    [dislikeActivity setObject:self.photo forKey:kTinderActivityPhotoKey];
+    [dislikeActivity saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        self.isLikedByCurrentUser = NO;
+        self.isDislikedByCurrentUser = YES;
+        [self.activities addObject:dislikeActivity];
+       //  [self setupNextPhoto];
+    }];
+}
+
+- (void)queryForCurrentPhotoIndex {
+    if ([self.photos count] > 0) {
+        self.photo = self.photos[self.currentPhotoIndex];
+        PFFile *file = self.photo[kTinderPhotoPictureKey];
+        [file getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
+            if (!error) {
+               //  UIImage *image = [UIImage imageWithData:data];
+                //self.photoImageView.image = image;
+                //[self updateView];
+                
+                // [self setupBackgroundViews];
+                
+            } else NSLog(@"Failed to download photo:%@", error);
+        }];
+        
+        PFQuery *queryForLike = [PFQuery queryWithClassName:kTinderActivityClassKey];
+        [queryForLike whereKey:kTinderActivityTypeKey equalTo:kTinderActivityTypeLikeKey];
+        [queryForLike whereKey:kTinderActivityPhotoKey equalTo:self.photo];
+        [queryForLike whereKey:kTinderActivityFromUserKey equalTo:[PFUser currentUser]];
+        
+        PFQuery *queryForDislike = [PFQuery queryWithClassName:kTinderActivityClassKey];
+        [queryForDislike whereKey:kTinderActivityTypeKey equalTo:kTinderActivityTypeDislikeKey];
+        [queryForDislike whereKey:kTinderActivityPhotoKey equalTo:self.photo];
+        [queryForDislike whereKey:kTinderActivityFromUserKey equalTo:[PFUser currentUser]];
+        
+        // Join the 2 queries
+        PFQuery *likeAndDislikeQuery = [PFQuery orQueryWithSubqueries:@[queryForLike, queryForDislike]];
+        [likeAndDislikeQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+            if (!error) {
+                self.activities = [objects mutableCopy];
+                if ([self.activities count] == 0) {
+                    self.isLikedByCurrentUser = NO;
+                    self.isDislikedByCurrentUser = NO;
+                } else {
+                    // does in fact have either a like or dislike
+                    PFObject *activity = self.activities[0];
+                    if ([activity[kTinderActivityTypeKey] isEqualToString:kTinderActivityTypeLikeKey]) {
+                        self.isLikedByCurrentUser = YES;
+                        self.isDislikedByCurrentUser = NO;
+                    } else if ([activity[kTinderActivityTypeKey] isEqualToString:kTinderActivityTypeDislikeKey]) {
+                        self.isLikedByCurrentUser = NO;
+                        self.isDislikedByCurrentUser = YES;
+                    } else {
+                        // some sort of other activity
+                    }
+                    
+                }
+//                self.likeButton.enabled = YES;
+//                self.dislikeButton.enabled = YES;
+//                self.infoButton.enabled = YES;
+            } else {
+                NSLog(@"%@", error);
+            }
+        }];
+    }
 }
 
 @end

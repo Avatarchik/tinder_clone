@@ -215,6 +215,7 @@
     // Remove Observers
     [[NSNotificationCenter defaultCenter]removeObserver:self
                                              forKeyPath:UIDeviceOrientationDidChangeNotification];
+    
     // Close relationships
     _didChangedPage           = nil;
     _pagingViewMoving         = nil;
@@ -569,7 +570,6 @@
 -(void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView{
     [self sendNewIndex:scrollView];
 }
-
 @end
 
 #pragma mark - SLPagingViewControllerSegueSetController segue identifier's prefix

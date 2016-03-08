@@ -45,7 +45,7 @@
     
     if ([userDefaults boolForKey:@"isLoggedIn"]) {
         OnboardingViewController *onboardVC = [[OnboardingViewController alloc] init];
-        [onboardVC LogIned];
+        // [onboardVC LogIned];
     }
     else
     {

@@ -220,10 +220,10 @@ typedef void(^SLPagingViewDidChanged)(NSInteger currentPage);
  *  @param color
  */
 -(void)setNavigationBarColor:(UIColor*) color;
-
 @end
 
 extern NSString* const SLPagingViewPrefixIdentifier;  // this is @"sl_"
+
 
 @interface SLPagingViewControllerSegueSetController : UIStoryboardSegue
 @end
